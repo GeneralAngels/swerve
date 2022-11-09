@@ -71,5 +71,9 @@ public class Falcon extends AbstractMotor{
     public double getRpm() {
         return this._talon.getSelectedSensorVelocity() / rpmToUnitsRatio;
     }
+
+    public double getPosition() {
+        return this._talon.getSelectedSensorPosition(0);
+    }
     
 }
