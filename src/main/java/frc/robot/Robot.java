@@ -4,8 +4,15 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.CANCoderConfiguration;
+import com.ctre.phoenix.sensors.CANCoderStatusFrame;
+import com.ctre.phoenix.sensors.SensorTimeBase;
+import com.ctre.phoenix.sensors.WPI_CANCoder;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -19,10 +26,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
-  TalonFX rightFront;
-  TalonFX rightRear;
-  TalonFX leftRear;
-  TalonFX leftFront;
+  CANCoder leftFront;
+  // WPI_CANCoder leftFront;
+  // AnalogInput rightFrontEncoder = new AnalogInput(4);
+  TalonFX leftFrontRotation;
 
 
   private RobotContainer m_robotContainer;
@@ -37,10 +44,26 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-    rightFront = new TalonFX(21);
-    rightRear = new TalonFX(22);
-    leftRear = new TalonFX(23);
-    leftFront = new TalonFX(24);
+    leftFront = new CANCoder(1);
+    leftFrontRotation = new TalonFX(24);
+
+    CANCoderConfiguration config = new CANCoderConfiguration();
+    config.sensorCoefficient = 2 * Math.PI * 4096.0;
+    config.unitString = "rad";
+    config.sensorTimeBase = SensorTimeBase.PerSecond;
+    
+    leftFront.configAllSettings(config);
+    
+    /*
+    leftFront = new WPI_CANCoder(4, "rio");
+    CANCoderConfiguration config = new CANCoderConfiguration();
+    config.unitString = "penguins";
+    leftFront.configAllSettings(config);
+    */
+  }
+
+  @Override
+  public void teleopPeriodic() {
   }
 
   /**
@@ -57,11 +80,9 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-
-    System.out.println("right front: " + rightFront.getSelectedSensorPosition());
-    System.out.println("right rear: " + rightRear.getSelectedSensorPosition());
-    System.out.println("left rear: " + leftRear.getSelectedSensorPosition());
-    System.out.println("left front: " + rightFront.getSelectedSensorPosition());
+    System.out.println(leftFront.getPosition());
+    // System.out.println(leftFrontRotation.getSelectedSensorPosition());
+    // System.out.println(rightFrontEncoder.getValue());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -98,8 +119,6 @@ public class Robot extends TimedRobot {
   }
 
   /** This function is called periodically during operator control. */
-  @Override
-  public void teleopPeriodic() {}
 
   @Override
   public void testInit() {

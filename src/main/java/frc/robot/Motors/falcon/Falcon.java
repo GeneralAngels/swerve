@@ -7,7 +7,9 @@ package frc.robot.Motors.falcon;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.sensors.CANCoder;
 
+import frc.robot.Constants;
 import frc.robot.Motors.abstractMotors.AbstractMotor;
 
 
@@ -17,7 +19,7 @@ public class Falcon extends AbstractMotor{
     
     // Contstans:
     int kTimeoutMs = 30; // TODO: validate that this is the right way
-    int ticksForRotation = 2048;
+    int ticksForRotation = Constants.EncoderContants.canCoderTicksToRotation;
     int rpmToUnitsRatio = ticksForRotation / 600; // 600 = 100ms / minute
 
     public Falcon
@@ -36,7 +38,7 @@ public class Falcon extends AbstractMotor{
         // Setting feedback sensor (encoder)
         _talon.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
                                             kPIDLoopSlotIdx, 
-											kTimeoutMs);
+											kTimeoutMs); //TODO: Solve for using absoulute encoder
         
         // Config peak and minimal values:
         _talon.configNominalOutputForward(0, kTimeoutMs);
