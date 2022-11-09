@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 /** Add your docs here. */
 public class RotationFalcon extends Falcon {
     double positonOffset;
+    double direction = 1;
     
     public RotationFalcon
     (
@@ -24,7 +25,20 @@ public class RotationFalcon extends Falcon {
     }
 
     public void setAngle(double angle) {
-        double ticksFromOffset = Math.min((angle / 360) * this.ticksForRotation, 360 - (angle / 360) * this.ticksForRotation);
+        double ticksFromOffset = (angle / 360) * this.ticksForRotation;
+        
+        if (ticksFromOffset > this._talon.getSelectedSensorPosition(0)) {
+            direction = -1;
+        }
+        else {
+            direction = 1;
+        }
+
         this.setPosition(positonOffset + ticksFromOffset);
+    }
+
+    @Override
+    public void setRpm(double rpm) {
+        super.setRpm(rpm * direction);
     }
 }
