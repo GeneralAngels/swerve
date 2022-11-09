@@ -27,7 +27,7 @@ public class RotationFalcon extends Falcon {
     public void setAngle(double angle) {
         double ticksFromOffset = (angle / 360) * this.ticksForRotation;
         
-        if (ticksFromOffset > this._talon.getSelectedSensorPosition(0)) {
+        if (this._talon.getSelectedSensorPosition(0) > ticksFromOffset) {
             direction = -1;
         }
         else {
