@@ -7,15 +7,12 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
-import com.ctre.phoenix.sensors.CANCoderConfiguration;
-import com.ctre.phoenix.sensors.CANCoderStatusFrame;
-import com.ctre.phoenix.sensors.SensorTimeBase;
-import com.ctre.phoenix.sensors.WPI_CANCoder;
 
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Motors.falcon.Falcon;
+import frc.robot.Motors.falcon.RotationFalcon;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -26,13 +23,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
-  CANCoder leftFront;
-  // WPI_CANCoder leftFront;
-  // AnalogInput rightFrontEncoder = new AnalogInput(4);
-  TalonFX leftFrontRotation;
-
+  TalonFX motor;
 
   private RobotContainer m_robotContainer;
+  RotationFalcon falcon;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -42,28 +36,24 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
-
-    leftFront = new CANCoder(1);
-    leftFrontRotation = new TalonFX(24);
-
-    CANCoderConfiguration config = new CANCoderConfiguration();
-    config.sensorCoefficient = 2 * Math.PI * 4096.0;
-    config.unitString = "rad";
-    config.sensorTimeBase = SensorTimeBase.PerSecond;
+    motor = new TalonFX(21);
+    System.out.println("CANCoder: " + new CANCoder(1).getAbsolutePosition() + ", y: " + motor.getSelectedSensorPosition(0) * 7 * 360 / (2048 * 150));
+    falcon = new RotationFalcon(
+      motor, 1, 
+      0, 
+      0.6, -0.6, 
+      0, 0.2, 0.0, 0.0, 
+      0, 37.2, 
+      false, true
+    );
+    falcon.setFalconEncoder();
     
-    leftFront.configAllSettings(config);
-    
-    /*
-    leftFront = new WPI_CANCoder(4, "rio");
-    CANCoderConfiguration config = new CANCoderConfiguration();
-    config.unitString = "penguins";
-    leftFront.configAllSettings(config);
-    */
   }
 
   @Override
   public void teleopPeriodic() {
+    falcon.setAngle(0);
+    System.out.println(falcon.getPosition());
   }
 
   /**
@@ -80,7 +70,6 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    System.out.println(leftFront.getPosition());
     // System.out.println(leftFrontRotation.getSelectedSensorPosition());
     // System.out.println(rightFrontEncoder.getValue());
   }

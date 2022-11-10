@@ -21,4 +21,11 @@ public final class Constants {
         public final static int canCoderTicksToRotation = 2048;
     }
 
+    public static class SwerveConstants {
+        public static double homeFrontRightAngle = 37.17;
+        public static double rightRearEncoderOffset = 44.82;
+        public static double leftRearEncoderOffset = 174.11;
+        public static double leftFrontEncoderOffset = 109.16;
+    }
+
 }

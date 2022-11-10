@@ -4,6 +4,8 @@
 
 package frc.robot.Motors.falcon;
 
+import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.SensorTerm;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -15,7 +17,7 @@ import frc.robot.Motors.abstractMotors.AbstractMotor;
 
 /** Add your docs here. */
 public class Falcon extends AbstractMotor{
-    TalonFX _talon;
+    public TalonFX _talon;
     
     // Contstans:
     int kTimeoutMs = 30; // TODO: validate that this is the right way
@@ -32,9 +34,26 @@ public class Falcon extends AbstractMotor{
     {
         this._talon = talon;
 
-        this._talon.configFactoryDefault();
         this._talon.configNeutralDeadband(0.001); // setting the minimal Deadband
 
+        this.config
+        (
+            _talon, kPIDLoopSlotIdx, 
+            peakOutputForward, peakOutputReverse, 
+            Kf, Kp, Ki, Kd,
+            false
+        );
+    }
+
+    public void config
+    (
+        TalonFX _talon, int kPIDLoopSlotIdx,
+        double peakOutputForward, double peakOutputReverse,
+        double Kf, double Kp, double Ki, double Kd,
+        Boolean invertSensorPhase
+    )
+    {
+        System.out.println("not correctly");
         // Setting feedback sensor (encoder)
         _talon.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
                                             kPIDLoopSlotIdx, 
@@ -47,11 +66,11 @@ public class Falcon extends AbstractMotor{
 		_talon.configPeakOutputReverse(peakOutputReverse, kTimeoutMs);
 
         /* Config the Velocity closed loop gains in slot0 */
-		_talon.selectProfileSlot(kPIDLoopSlotIdx, 0); // pidIdx = 0 because we use regular closed loop controller
         _talon.config_kF(kPIDLoopSlotIdx, Kf, kTimeoutMs);
 		_talon.config_kP(kPIDLoopSlotIdx, Kp, kTimeoutMs);
 		_talon.config_kI(kPIDLoopSlotIdx, Ki, kTimeoutMs);
 		_talon.config_kD(kPIDLoopSlotIdx, Kd, kTimeoutMs);
+        _talon.selectProfileSlot(kPIDLoopSlotIdx, 0); // pidIdx = 0 because we use regular closed loop controller
     }
     
     public void setRpm(double Rpm) {
@@ -63,6 +82,8 @@ public class Falcon extends AbstractMotor{
     }
 
     public void setPosition(double position) {
+        
+        // System.out.println(position + ", " + this._talon.getSelectedSensorPosition(0));
         this._talon.set(TalonFXControlMode.Position, position);
     }
 
