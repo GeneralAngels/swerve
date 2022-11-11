@@ -22,10 +22,17 @@ public final class Constants {
     }
 
     public static class SwerveConstants {
-        public static double homeFrontRightAngle = 37.17;
-        public static double rightRearEncoderOffset = 44.82;
-        public static double leftRearEncoderOffset = 174.11;
-        public static double leftFrontEncoderOffset = 109.16;
+        public static double homeFrontRightAngle = 37.001;
+        public static double homeRearRightAngle = 224.38;
+        public static double homeRearLeftAngle = 353.93;
+        public static double homeFrontLeftAngle = 289.24;
+
+        /*
+        right front encoder: 37.001953125
+        right rear encoder: 224.384765625
+        left rear encoder: 353.935546875
+        left front encoder: 289.248046875
+        */
     }
 
 }

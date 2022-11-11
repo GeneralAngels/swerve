@@ -20,7 +20,7 @@ public class RotationFalcon extends Falcon {
 
     public CANCoder canCoder;
 
-    double adder;
+    double tick_0;
     
     public RotationFalcon
     (
@@ -43,7 +43,8 @@ public class RotationFalcon extends Falcon {
         this.canCoder = new CANCoder(CANCoderPort);
 
         this.config(_talon, kPIDLoopIdx, peakOutputForward, peakOutputReverse, Kf, Kp, Ki, Kd, invertSensorPhase);
-        this._talon.setInverted(inverted);
+        // this._talon.setInverted(inverted);
+        this._talon.setSensorPhase(true);
     }
 
     @Override
@@ -73,17 +74,25 @@ public class RotationFalcon extends Falcon {
     }
 
     public void setAngle(double angle) {
-        this.setPosition(-angle * 2048 * 150 / (360 * 7) + adder);
+        this.setPosition(this.anglesToTicks(angle) + tick_0);
     }
 
     public void setFalconEncoder() {
-        double canCoderValue = this.canCoder.getAbsolutePosition();
-        System.out.println(canCoderValue);
-        double absoluteCurrectFalconPosition = (canCoderValue - homeAngle) * 2048 * 150 / (360 * 7);
-        // this._talon.setSelectedSensorPosition(absoluteCurrectFalconPosition);
-        adder = this.getPosition() - absoluteCurrectFalconPosition;
+        double a = this.anglesToTicks(this.homeAngle - this.canCoder.getAbsolutePosition());
+        double y = this._talon.getSelectedSensorPosition(0);
+
+        tick_0 = y - a;
+        
+        System.out.println("angle to ticks: " + a);
+        System.out.println("can coder: " + this.canCoder.getAbsolutePosition());
+        System.out.println("talon encoder: " + y);
+        System.out.println("result: " + tick_0);
     }
 
+    public double anglesToTicks(double angles) {
+        return angles * 2048 * 150 / (360 * 7);
+    }
+    
     @Override
     public void setRpm(double rpm) {
         super.setRpm(rpm * direction);

@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 
+import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -24,36 +25,93 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   TalonFX motor;
+  CANCoder canCoder = new CANCoder(1);
 
   private RobotContainer m_robotContainer;
-  RotationFalcon falcon;
+  
+  RotationFalcon frontRight;
+  RotationFalcon rearRight;
+  RotationFalcon rearLeft;
+  RotationFalcon frontLeft;
 
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
-  @Override
+  public void printEncoders() {
+    CANCoder rightFrontEncoder = new CANCoder(1);
+    System.out.println("right front encoder: " + rightFrontEncoder.getAbsolutePosition());
+
+    CANCoder rightRearEncoder = new CANCoder(2);
+    System.out.println("right rear encoder: " + rightRearEncoder.getAbsolutePosition());
+
+    CANCoder leftRearEncoder = new CANCoder(3);
+    System.out.println("left rear encoder: " + leftRearEncoder.getAbsolutePosition());
+
+    CANCoder leftFrontEncoder = new CANCoder(4);
+    System.out.println("left front encoder: " + leftFrontEncoder.getAbsolutePosition());
+  }
+  
+   @Override
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    
+    printEncoders();
+    
     motor = new TalonFX(21);
-    System.out.println("CANCoder: " + new CANCoder(1).getAbsolutePosition() + ", y: " + motor.getSelectedSensorPosition(0) * 7 * 360 / (2048 * 150));
-    falcon = new RotationFalcon(
+    frontRight = new RotationFalcon(
       motor, 1, 
       0, 
       0.6, -0.6, 
       0, 0.2, 0.0, 0.0, 
-      0, 37.2, 
-      false, true
+      0, Constants.SwerveConstants.homeFrontRightAngle, 
+      true, true
     );
-    falcon.setFalconEncoder();
+    frontRight.setFalconEncoder();
+
+    motor = new TalonFX(22);
+    rearRight = new RotationFalcon(
+      motor, 2, 
+      0, 
+      0.6, -0.6, 
+      0, 0.2, 0.0, 0.0, 
+      0, Constants.SwerveConstants.homeRearRightAngle, 
+      true, true
+    );
+    rearRight.setFalconEncoder();
+
+    motor = new TalonFX(23);
+    rearLeft = new RotationFalcon(
+      motor, 3, 
+      0, 
+      0.6, -0.6, 
+      0, 0.2, 0.0, 0.0, 
+      0, Constants.SwerveConstants.homeRearLeftAngle, 
+      true, true
+    );
+    rearLeft.setFalconEncoder();
+
+    motor = new TalonFX(24);
+    frontLeft = new RotationFalcon(
+      motor, 4, 
+      0, 
+      0.6, -0.6, 
+      0, 0.2, 0.0, 0.0, 
+      0, Constants.SwerveConstants.homeFrontLeftAngle, 
+      true, true
+    );
+    frontLeft.setFalconEncoder();
     
   }
 
   @Override
   public void teleopPeriodic() {
-    falcon.setAngle(0);
-    System.out.println(falcon.getPosition());
+    frontRight.setAngle(0);
+    rearRight.setAngle(0);
+    rearLeft.setAngle(0);
+    frontLeft.setAngle(0);
+    // System.out.println(falcon.getPosition());
   }
 
   /**
@@ -70,6 +128,9 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    // System.out.println("falcon encoder: " + motor.getSelectedSensorPosition());
+    // System.out.println("canCoder: " + canCoder.getAbsolutePosition() + ", falcon encoder: " + falcon.getPosition());
+
     // System.out.println(leftFrontRotation.getSelectedSensorPosition());
     // System.out.println(rightFrontEncoder.getValue());
   }
