@@ -164,18 +164,18 @@ public class Robot extends TimedRobot {
                                         1 / (2 * Math.PI * 0.19) * 60);
     moduleLeftRear = new SwerveModule(drivingLeftRear, rotationLeftRear, 
                                         1 / (2 * Math.PI * 0.19) * 60);
-    swerve = new SwerveDriveTrain(moduleRightFront, moduleRightRear, moduleLeftRear, moduleRightFront, 0.7, 0.7);
+    swerve = new SwerveDriveTrain(moduleRightFront, moduleRightRear, moduleLeftRear, moduleLeftFront, 0.7, 0.7);
     controller = new PS4Controller(0);
     joystick = new SwerveJoysticks(controller, swerve);
   }
 
   @Override
   public void teleopPeriodic() {
-    moduleLeftFront.setVector(new Vector(2, 90, Representation.Polar));
-    moduleLeftRear.setVector(new Vector(2, 90, Representation.Polar));
-    moduleRightFront.setVector(new Vector(2, 90, Representation.Polar));
-    moduleRightRear.setVector(new Vector(2, 90, Representation.Polar));
-    // swerve.setSwerveVelocities(new Vector(3, 90, Representation.Polar), 0);
+    // moduleLeftFront.setVector(new Vector(2, 90, Representation.Polar));
+    // moduleLeftRear.setVector(new Vector(2, 90, Representation.Polar));
+    // moduleRightFront.setVector(new Vector(2, 90, Representation.Polar));
+    // moduleRightRear.setVector(new Vector(2, 90, Representation.Polar));
+    swerve.setSwerveVelocities(new Vector(0, 0, Representation.Polar), -10);
   }
 
   /**

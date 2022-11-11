@@ -14,7 +14,7 @@ public class Vector {
     double x; 
     double y;
     double magnitude;
-    double angle;
+    double degreesAngle;
     double raidansAngle;
     Representation representation;
     
@@ -28,16 +28,16 @@ public class Vector {
             this.x = x;
             this.y = y;
             this.raidansAngle = Math.atan2(y, x);
-            this.angle = Math.toDegrees(raidansAngle);
+            this.degreesAngle = Math.toDegrees(raidansAngle);
             this.magnitude = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
         }
         else
         {
             this.magnitude = x;
-            this.angle = y;
-            this.raidansAngle = Math.toRadians(angle);
-            this.x = Math.cos(this.raidansAngle) * this.magnitude;
-            this.y = Math.sin(this.raidansAngle) * this.magnitude;
+            this.degreesAngle = y;
+            this.raidansAngle = Math.toRadians(degreesAngle);
+            this.x = Math.cos(this.raidansAngle) * this.magnitude; // meter
+            this.y = Math.sin(this.raidansAngle) * this.magnitude; // meter
         }
     }
     public double getMagnitude() {
@@ -45,7 +45,7 @@ public class Vector {
     }
 
     public double getAngle() {
-        return this.angle;
+        return this.degreesAngle;
     }
     public void changeMagnitude(double magnitude) {
         this.x = Math.cos(this.raidansAngle) * magnitude;
@@ -59,6 +59,4 @@ public class Vector {
     public double getY() {
         return this.y;
     }
-
-    
 }

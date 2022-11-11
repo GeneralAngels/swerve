@@ -37,14 +37,14 @@ public class SwerveDriveTrain extends SubsystemBase {
     Vector module_1_vector = new Vector(
       (vector.getX() + omega * (width / 2)), 
       (vector.getY() + omega * (length / 2)), 
-      Representation.Polar
+      Representation.Cartisian
     );
     this.rightFront.setVector(module_1_vector);
 
     // Module 2:
     Vector module_2_vector = new Vector(
       (vector.getX() + omega * (width / 2)), 
-      (vector.getY() - omega * (length / 2)), Representation.Polar
+      (vector.getY() - omega * (length / 2)), Representation.Cartisian
     );
     this.rightRear.setVector(module_2_vector);
 
@@ -52,7 +52,7 @@ public class SwerveDriveTrain extends SubsystemBase {
     Vector module_3_vector = new Vector(
       (vector.getX() - omega * (width / 2)), 
       (vector.getY() - omega * (length / 2)), 
-      Representation.Polar
+      Representation.Cartisian
     );
     this.leftRear.setVector(module_3_vector);
 
@@ -60,7 +60,7 @@ public class SwerveDriveTrain extends SubsystemBase {
     Vector module_4_vector = new Vector(
       (vector.getX() - omega * (width / 2)), 
       (vector.getY() + omega * (length / 2)), 
-      Representation.Polar
+      Representation.Cartisian
     );
     this.leftFront.setVector(module_4_vector);
   }
