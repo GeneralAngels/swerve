@@ -33,7 +33,7 @@ public class RotationFalcon extends Falcon {
         Boolean inverted, Boolean invertSensorPhase
     ) 
     {
-        super(talon, kPIDLoopIdx, peakOutputForward, peakOutputReverse, Kf, Kp, Ki, Kd);
+        super(talon, kPIDLoopIdx, peakOutputForward, peakOutputReverse, Kf, Kp, Ki, Kd, 1);
 
         this.homeAngle = homeAngle;
         this.motorOffset = motorOffset;

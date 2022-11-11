@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.time.StopWatch;
 
 import frc.robot.Constants;
 import frc.robot.Motors.abstractMotors.AbstractMotor;
@@ -22,17 +23,20 @@ public class Falcon extends AbstractMotor{
     // Contstans:
     int kTimeoutMs = 30; // TODO: validate that this is the right way
     int ticksForRotation = Constants.EncoderContants.canCoderTicksToRotation;
-    int rpmToUnitsRatio = ticksForRotation / 600; // 600 = 100ms / minute
+    double rpmToUnitsRatioVelocity = ticksForRotation / 600; // 600 = 100ms / minute
 
     public Falcon
     (
         TalonFX talon,
         int kPIDLoopSlotIdx,
         double peakOutputForward, double peakOutputReverse,
-        double Kf, double Kp, double Ki, double Kd
+        double Kf, double Kp, double Ki, double Kd,
+        double gearRatio
     ) 
     {
         this._talon = talon;
+
+        this.rpmToUnitsRatioVelocity = this.rpmToUnitsRatioVelocity * gearRatio;
 
         this._talon.configNeutralDeadband(0.001); // setting the minimal Deadband
 
@@ -74,7 +78,7 @@ public class Falcon extends AbstractMotor{
     }
     
     public void setRpm(double Rpm) {
-        this._talon.set(TalonFXControlMode.Velocity, Rpm * rpmToUnitsRatio);
+        this._talon.set(TalonFXControlMode.Velocity, Rpm * rpmToUnitsRatioVelocity);
     }
 
     public void setPrecentage(double precentage) {
@@ -87,16 +91,28 @@ public class Falcon extends AbstractMotor{
         this._talon.set(TalonFXControlMode.Position, position);
     }
 
-    public double getTicks() {
-        return this._talon.getSelectedSensorVelocity();
+    public double getVelocityTicks() {
+        return this._talon.getSelectedSensorVelocity(0);
     }
 
     public double getRpm() {
-        return this._talon.getSelectedSensorVelocity() / rpmToUnitsRatio;
+        return this.getVelocityTicks() / rpmToUnitsRatioVelocity;
     }
 
     public double getPosition() {
         return this._talon.getSelectedSensorPosition(0);
+    }
+
+    public double getKf(double precent) {
+        this.setPrecentage(precent);
+        
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        
+        while (stopWatch.getDuration() < 4) {}
+
+        this.setPrecentage(0);
+        return (precent * 1023) / this.getVelocityTicks();
     }
     
 }

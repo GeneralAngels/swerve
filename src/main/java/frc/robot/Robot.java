@@ -9,11 +9,19 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.wpilibj.CAN;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Motors.SwerveModule;
 import frc.robot.Motors.falcon.Falcon;
 import frc.robot.Motors.falcon.RotationFalcon;
+import frc.robot.Utils.Vector;
+import frc.robot.Utils.Vector.Representation;
+import frc.robot.commands.ControllerCalculator;
+import frc.robot.commands.SwerveJoysticks;
+import frc.robot.subsystems.SwerveDriveTrain;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -29,10 +37,24 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
   
-  RotationFalcon frontRight;
-  RotationFalcon rearRight;
-  RotationFalcon rearLeft;
-  RotationFalcon frontLeft;
+  RotationFalcon rotationRightFront;
+  RotationFalcon rotationRightRear;
+  RotationFalcon rotationLeftRear;
+  RotationFalcon rotationLeftFront;
+
+  Falcon drivingRightFront;
+  Falcon drivingRightRear;
+  Falcon drivingLeftRear;
+  Falcon drivingLeftFront;
+
+  SwerveModule moduleRightFront;
+  SwerveModule moduleRightRear;
+  SwerveModule moduleLeftFront;
+  SwerveModule moduleLeftRear;
+  SwerveDriveTrain swerve;
+  SwerveJoysticks joystick;
+  ControllerCalculator calculator;
+  PS4Controller controller;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -60,7 +82,7 @@ public class Robot extends TimedRobot {
     printEncoders();
     
     motor = new TalonFX(21);
-    frontRight = new RotationFalcon(
+    rotationRightFront = new RotationFalcon(
       motor, 1, 
       0, 
       0.6, -0.6, 
@@ -68,10 +90,10 @@ public class Robot extends TimedRobot {
       0, Constants.SwerveConstants.homeFrontRightAngle, 
       true, true
     );
-    frontRight.setFalconEncoder();
+    rotationRightFront.setFalconEncoder();
 
     motor = new TalonFX(22);
-    rearRight = new RotationFalcon(
+    rotationRightRear = new RotationFalcon(
       motor, 2, 
       0, 
       0.6, -0.6, 
@@ -79,10 +101,10 @@ public class Robot extends TimedRobot {
       0, Constants.SwerveConstants.homeRearRightAngle, 
       true, true
     );
-    rearRight.setFalconEncoder();
+    rotationRightRear.setFalconEncoder();
 
     motor = new TalonFX(23);
-    rearLeft = new RotationFalcon(
+    rotationLeftRear = new RotationFalcon(
       motor, 3, 
       0, 
       0.6, -0.6, 
@@ -90,10 +112,10 @@ public class Robot extends TimedRobot {
       0, Constants.SwerveConstants.homeRearLeftAngle, 
       true, true
     );
-    rearLeft.setFalconEncoder();
+    rotationLeftRear.setFalconEncoder();
 
     motor = new TalonFX(24);
-    frontLeft = new RotationFalcon(
+    rotationLeftFront = new RotationFalcon(
       motor, 4, 
       0, 
       0.6, -0.6, 
@@ -101,17 +123,55 @@ public class Robot extends TimedRobot {
       0, Constants.SwerveConstants.homeFrontLeftAngle, 
       true, true
     );
-    frontLeft.setFalconEncoder();
+    rotationLeftFront.setFalconEncoder();
     
+    drivingRightFront = new Falcon(
+      new TalonFX(11), 
+      0, 
+      0.7, -0.7, 
+      0.045, 0.06, 0, 0,
+      8.14
+    );
+
+    drivingRightRear = new Falcon(
+      new TalonFX(12), 
+      0, 
+      0.7, -0.7, 
+      0.045, 0.06, 0, 0,
+      8.14
+    );
+
+    drivingLeftRear = new Falcon(
+      new TalonFX(13), 
+      0, 
+      0.7, -0.7, 
+      0.045, 0.06, 0, 0,
+      8.14
+    );
+
+    drivingLeftFront = new Falcon(
+      new TalonFX(14), 
+      0, 
+      0.7, -0.7, 
+      0.045, 0.06, 0, 0,
+      8.14
+    );
+    moduleRightFront = new SwerveModule(drivingRightFront, rotationRightFront, 
+                                        1 / (2 * Math.PI * 0.19) * 60);
+    moduleRightRear = new SwerveModule(drivingRightRear, rotationRightRear, 
+                                        1 / (2 * Math.PI * 0.19) * 60);
+    moduleLeftFront = new SwerveModule(drivingLeftFront, rotationLeftFront, 
+                                        1 / (2 * Math.PI * 0.19) * 60);
+    moduleLeftRear = new SwerveModule(drivingLeftRear, rotationLeftRear, 
+                                        1 / (2 * Math.PI * 0.19) * 60);
+    swerve = new SwerveDriveTrain(moduleRightFront, moduleRightRear, moduleLeftRear, moduleRightFront, 0.7, 0.7);
+    controller = new PS4Controller(0);
+    joystick = new SwerveJoysticks(controller, swerve);
   }
 
   @Override
   public void teleopPeriodic() {
-    frontRight.setAngle(0);
-    rearRight.setAngle(0);
-    rearLeft.setAngle(0);
-    frontLeft.setAngle(0);
-    // System.out.println(falcon.getPosition());
+    moduleLeftFront.setVector(new Vector(2, 50, Representation.Polar));
   }
 
   /**
@@ -166,6 +226,10 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    // System.out.println("right front Kf: " + drivingRightFront.getKf(0.4));
+    // System.out.println("right rear Kf: " + drivingRightRear.getKf(0.4));
+    // System.out.println("left rear Kf: " + drivingLeftRear.getKf(0.4));
   }
 
   /** This function is called periodically during operator control. */

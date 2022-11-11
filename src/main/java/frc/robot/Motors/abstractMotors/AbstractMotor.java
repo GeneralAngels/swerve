@@ -9,7 +9,7 @@ public abstract class AbstractMotor {
     static double encoderTicksToRotation;
     
     public double getRotations() {
-        return this.getTicks() / encoderTicksToRotation;
+        return this.getVelocityTicks() / encoderTicksToRotation;
     }
 
     public abstract void setRpm(double Rpm);
@@ -19,7 +19,7 @@ public abstract class AbstractMotor {
     public abstract void setPosition(double position);
 
     public abstract double getRpm();
-    public abstract double getTicks();
+    public abstract double getVelocityTicks();
     
     public double getDegrees() {
         return this.getRotations() % 1 * 360;
