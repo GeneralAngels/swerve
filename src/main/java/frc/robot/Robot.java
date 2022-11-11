@@ -171,7 +171,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    moduleLeftFront.setVector(new Vector(2, 50, Representation.Polar));
+    moduleLeftFront.setVector(new Vector(2, 90, Representation.Polar));
+    moduleLeftRear.setVector(new Vector(2, 90, Representation.Polar));
+    moduleRightFront.setVector(new Vector(2, 90, Representation.Polar));
+    moduleRightRear.setVector(new Vector(2, 90, Representation.Polar));
+    // swerve.setSwerveVelocities(new Vector(3, 90, Representation.Polar), 0);
   }
 
   /**
