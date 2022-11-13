@@ -93,6 +93,14 @@ public class RotationFalcon extends Falcon {
         return angles * 2048 * 150 / (360 * 7);
     }
     
+    public double ticksToAngle(double ticks){
+        return ((ticks / 2048) / 150) * (360 * 7);
+    }
+
+    public double getAngle(){
+        return ticksToAngle(this.canCoder.getAbsolutePosition());
+    }
+    
     @Override
     public void setRpm(double rpm) {
         super.setRpm(rpm * direction);

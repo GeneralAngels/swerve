@@ -35,31 +35,31 @@ public class SwerveDriveTrain extends SubsystemBase {
   public void setSwerveVelocities(Vector vector, double omega) {
     // Module 1:
     Vector module_1_vector = new Vector(
-      (vector.getX() + omega * (width / 2)), 
-      (vector.getY() + omega * (length / 2)), 
+      (vector.getX() - omega * (length / 2)), 
+      (vector.getY() + omega * (width / 2)), 
       Representation.Cartisian
     );
     this.rightFront.setVector(module_1_vector);
 
     // Module 2:
     Vector module_2_vector = new Vector(
-      (vector.getX() + omega * (width / 2)), 
-      (vector.getY() - omega * (length / 2)), Representation.Cartisian
+      (vector.getX() - omega * (length / 2)), 
+      (vector.getY() - omega * (width / 2)), Representation.Cartisian
     );
     this.rightRear.setVector(module_2_vector);
 
     // Module 3:
     Vector module_3_vector = new Vector(
-      (vector.getX() - omega * (width / 2)), 
-      (vector.getY() - omega * (length / 2)), 
+      (vector.getX() - omega * (length / 2)), 
+      (vector.getY() + omega * (width / 2)), 
       Representation.Cartisian
     );
     this.leftRear.setVector(module_3_vector);
 
     // Module 4:
     Vector module_4_vector = new Vector(
-      (vector.getX() - omega * (width / 2)), 
-      (vector.getY() + omega * (length / 2)), 
+      (vector.getX() + omega * (length / 2)), 
+      (vector.getY() + omega * (width / 2)), 
       Representation.Cartisian
     );
     this.leftFront.setVector(module_4_vector);

@@ -48,6 +48,7 @@ public class Vector {
         return this.degreesAngle;
     }
     public void changeMagnitude(double magnitude) {
+        this.magnitude = magnitude;
         this.x = Math.cos(this.raidansAngle) * magnitude;
         this.y = Math.sin(this.raidansAngle) * magnitude;
     }

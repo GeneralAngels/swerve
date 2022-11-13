@@ -18,12 +18,28 @@ public class ControllerCalculator {
 
     public Vector getLocationVector() {
         Vector vector = new Vector(
-            this.controller.getLeftX(),
-            this.controller.getLeftY(),
+            this.getX(),
+            this.getY(),
             Representation.Cartisian
         );
-        vector.changeMagnitude(1);
+        vector.changeMagnitude(2);
         return vector;
+    }
+
+    public double getX() {
+        double value = this.controller.getLeftX();
+        if (value < 0.15) {
+            value = 0;
+        }
+        return value;
+    }
+
+    public double getY() {
+        double value = -this.controller.getLeftY();
+        if (value < 0.15) {
+            value = 0;
+        }
+        return value;
     }
 
     public double getOmega() {
