@@ -10,7 +10,9 @@ import frc.robot.Utils.Vector.Representation;
 
 /** Add your docs here. */
 public class ControllerCalculator {
-    PS4Controller controller;
+    PS4Controller controller;          
+
+    double maxSpeed = 5;
 
     public ControllerCalculator(PS4Controller controller) {
         this.controller = controller;
@@ -18,31 +20,39 @@ public class ControllerCalculator {
 
     public Vector getLocationVector() {
         Vector vector = new Vector(
-            this.getX(),
             this.getY(),
+            -this.getX(),
             Representation.Cartisian
         );
-        vector.changeMagnitude(2);
+        vector.changeMagnitude(this.getGas() * maxSpeed);
         return vector;
+    }
+
+    public double getGas() {
+        return (this.controller.getR2Axis() + 1) / 2;
     }
 
     public double getX() {
         double value = this.controller.getLeftX();
-        if (value < 0.15) {
+        if (Math.abs(value) < 0.05) {
             value = 0;
         }
         return value;
     }
 
     public double getY() {
-        double value = -this.controller.getLeftY();
-        if (value < 0.15) {
+        double value = this.controller.getLeftY();
+        if (Math.abs(value) < 0.05) {
             value = 0;
         }
         return value;
     }
 
     public double getOmega() {
-        return this.controller.getRightX();
+        double value = -this.controller.getRightX();
+        if (Math.abs(value) < 0.05) {
+            value = 0;
+        }
+        return value * 10;
     }
 }

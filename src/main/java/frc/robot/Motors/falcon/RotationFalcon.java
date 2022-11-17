@@ -8,6 +8,8 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 
+import org.ejml.dense.row.decomposition.eig.watched.WatchedDoubleStepQREigenvector_DDRM;
+
 /** Add your docs here. */
 public class RotationFalcon extends Falcon {
     double motorOffset;
@@ -21,7 +23,7 @@ public class RotationFalcon extends Falcon {
     public CANCoder canCoder;
 
     double tick_0;
-    
+
     public RotationFalcon
     (
         TalonFX talon,
@@ -74,7 +76,25 @@ public class RotationFalcon extends Falcon {
     }
 
     public void setAngle(double angle) {
-        this.setPosition(this.anglesToTicks(angle) + tick_0);
+        double wantedTick = this.anglesToTicks(angle) + tick_0;
+        double curretPosition = this.getPosition();
+
+        double error = wantedTick - curretPosition;
+        double finalTarget;
+
+        if (error > this.anglesToTicks(180)) {
+            finalTarget = wantedTick - this.anglesToTicks(360);
+        }
+        else if (error < this.anglesToTicks(-180)) {
+            finalTarget = wantedTick + this.anglesToTicks(360);
+        }
+        else {
+            finalTarget = wantedTick;
+        }
+        
+        System.out.println("wantedTick: " + finalTarget + ", currentPosition: " + curretPosition);
+        
+        this.setPosition(finalTarget);
     }
 
     public void setFalconEncoder() {
