@@ -7,6 +7,7 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.Joystick;
@@ -164,7 +165,13 @@ public class Robot extends TimedRobot {
                                         1 / (2 * Math.PI * 0.19) * 60);
     moduleLeftRear = new SwerveModule(drivingLeftRear, rotationLeftRear, 
                                         1 / (2 * Math.PI * 0.19) * 60);
-    swerve = new SwerveDriveTrain(moduleRightFront, moduleRightRear, moduleLeftRear, moduleLeftFront, 0.7, 0.7);
+    
+    swerve = new SwerveDriveTrain(
+      moduleRightFront, moduleRightRear, moduleLeftRear, moduleLeftFront, 
+      new WPI_PigeonIMU(30),
+      0.7, 0.7
+    );
+    
     controller = new PS4Controller(0);
     joystick = new SwerveJoysticks(controller, swerve);
   }

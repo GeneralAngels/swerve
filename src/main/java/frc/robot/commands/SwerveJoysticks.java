@@ -31,7 +31,7 @@ public class SwerveJoysticks extends CommandBase {
 
     Vector locationVector = this.controller.getLocationVector();
     // System.out.println(locationVector.getAngle() + ", " + locationVector.getMagnitude());
-    this.swerve.setSwerveVelocities(locationVector, this.controller.getOmega());
+    this.swerve.setRelativeSwerveVelocoties(locationVector, this.controller.getOmega());
   }
 
   // Called once the command ends or is interrupted.

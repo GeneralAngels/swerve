@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Motors.SwerveModule;
 import frc.robot.Utils.Vector;
@@ -15,24 +17,31 @@ public class SwerveDriveTrain extends SubsystemBase {
   SwerveModule leftRear;
   SwerveModule leftFront;
 
+  WPI_PigeonIMU gyro;
+
   double width; 
   double length;
 
   /** Creates a new SwerveDriveTrain. */
   public SwerveDriveTrain(
-    SwerveModule rightFront, SwerveModule rightRear, SwerveModule leftRear, SwerveModule leftFront, 
+    SwerveModule rightFront, SwerveModule rightRear, SwerveModule leftRear, SwerveModule leftFront,
+    WPI_PigeonIMU gyro, 
     double width, double length) {
+    
     
     this.rightFront = rightFront;
     this.rightRear = rightRear;
     this.leftRear = leftRear;
     this.leftFront = leftFront;
 
+    this.gyro = gyro;
+    this.gyro.calibrate();
+
     this.width = width;
     this.length = length;
   }
 
-  public void setSwerveVelocities(Vector vector, double omega) {
+  public void setRelativeSwerveVelocoties(Vector vector, double omega) {
     // Module 1:
     Vector module_1_vector = new Vector(
       (vector.getX() - omega * (length / 2)), 
@@ -63,6 +72,22 @@ public class SwerveDriveTrain extends SubsystemBase {
       Representation.Cartisian
     );
     this.leftFront.setVector(module_4_vector);
+  }
+
+  public void setAbsoluteSwerveVelocoties(Vector absoluteVector, double omega) {
+    this.setRelativeSwerveVelocoties(
+      SwerveDriveTrain.toRelativeVector(absoluteVector, this.gyro.getAngle()), omega
+    );
+  }
+  
+  public static Vector toRelativeVector(Vector absoluteVector, double robotAngle) {
+    double robotRadiansAngle = Math.toRadians(robotAngle);
+    
+    return new Vector(
+      Math.cos(robotRadiansAngle) * absoluteVector.getX() - Math.sin(robotRadiansAngle) * absoluteVector.getY(),
+      Math.sin(robotRadiansAngle) * absoluteVector.getX() + Math.cos(robotRadiansAngle) * absoluteVector.getY(),
+      Representation.Cartisian
+    );
   }
   
   @Override
