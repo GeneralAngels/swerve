@@ -21,6 +21,7 @@ import frc.robot.Motors.falcon.RotationFalcon;
 import frc.robot.Utils.Vector;
 import frc.robot.Utils.Vector.Representation;
 import frc.robot.commands.ControllerCalculator;
+import frc.robot.commands.LogCommand;
 import frc.robot.commands.SwerveJoysticks;
 import frc.robot.subsystems.SwerveDriveTrain;
 
@@ -79,6 +80,10 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    
+    m_robotContainer.setSocket();
+
+    CommandScheduler.getInstance().schedule(new LogCommand(0, () -> {return 2.2;}, m_robotContainer.outputStream));
     
     printEncoders();
     

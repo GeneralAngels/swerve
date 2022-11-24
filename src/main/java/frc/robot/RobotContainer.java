@@ -4,11 +4,14 @@
 
 package frc.robot;
 
+import java.io.DataOutputStream;
+import java.net.Socket;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -22,6 +25,23 @@ public class RobotContainer {
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
+  public String IP = "10.22.30.195";
+  public int PORT = 2230;
+
+  public Socket socket;
+  public DataOutputStream outputStream;
+
+  public void setSocket(){
+    try {
+      this.socket = new Socket(IP, PORT);
+      this.outputStream = new DataOutputStream(this.socket.getOutputStream());
+      System.out.println("finished");
+    }
+    catch (Exception exception) {
+
+    }
+  }
+  
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
