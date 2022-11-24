@@ -36,6 +36,8 @@ public class SwerveDriveTrain extends SubsystemBase {
 
     this.gyro = gyro;
     this.gyro.calibrate();
+    this.gyro.reset();
+    System.out.println("after callibration");
 
     this.width = width;
     this.length = length;
@@ -76,7 +78,7 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   public void setAbsoluteSwerveVelocoties(Vector absoluteVector, double omega) {
     this.setRelativeSwerveVelocoties(
-      SwerveDriveTrain.toRelativeVector(absoluteVector, this.gyro.getAngle()), omega
+      SwerveDriveTrain.toRelativeVector(absoluteVector, -this.gyro.getAngle()), omega
     );
   }
   

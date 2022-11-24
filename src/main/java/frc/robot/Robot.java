@@ -182,7 +182,7 @@ public class Robot extends TimedRobot {
     // moduleLeftRear.setVector(new Vector(2, 90, Representation.Polar));
     // moduleRightFront.setVector(new Vector(2, 90, Representation.Polar));
     // moduleRightRear.setVector(new Vector(2, 0, Representation.Polar));
-    // swerve.setSwerveVelocities(new Vector(0, 90, Representation.Polar), 5);
+    // swerve.setRelativeSwerveVelocoties(new Vector(0, 0, Representation.Polar), 6);
     joystick.execute();
 
   }
