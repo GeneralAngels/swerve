@@ -85,9 +85,7 @@ public class Falcon extends AbstractMotor{
         this._talon.set(TalonFXControlMode.PercentOutput, precentage);
     }
 
-    public void setPosition(double position) {
-        
-        // System.out.println(position + ", " + this._talon.getSelectedSensorPosition(0));
+    public void setPosition(double position) {        
         this._talon.set(TalonFXControlMode.Position, position);
     }
 

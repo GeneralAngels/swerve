@@ -89,9 +89,7 @@ public class RotationFalcon extends Falcon {
         else {
             finalTarget = wantedTick;
         }
-        
-        System.out.println("wantedTick: " + finalTarget + ", currentPosition: " + curretPosition);
-        
+                
         this.setPosition(finalTarget);
     }
 
@@ -100,11 +98,6 @@ public class RotationFalcon extends Falcon {
         double y = this._talon.getSelectedSensorPosition(0);
 
         tick_0 = y - a;
-        
-        System.out.println("angle to ticks: " + a);
-        System.out.println("can coder: " + this.canCoder.getAbsolutePosition());
-        System.out.println("talon encoder: " + y);
-        System.out.println("result: " + tick_0);
     }
 
     public double anglesToTicks(double angles) {

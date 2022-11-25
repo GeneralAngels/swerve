@@ -12,7 +12,7 @@ import frc.robot.Utils.Vector.Representation;
 public class ControllerCalculator {
     PS4Controller controller;          
 
-    double maxSpeed = 6.5;
+    double maxSpeed = 0.8;
 
     public ControllerCalculator(PS4Controller controller) {
         this.controller = controller;

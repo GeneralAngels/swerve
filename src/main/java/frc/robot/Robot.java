@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import frc.robot.Motors.SwerveModule;
 import frc.robot.Motors.falcon.Falcon;
 import frc.robot.Motors.falcon.RotationFalcon;
@@ -37,7 +38,7 @@ public class Robot extends TimedRobot {
   TalonFX motor;
   CANCoder canCoder = new CANCoder(1);
 
-  private RobotContainer m_robotContainer;
+  private RobotContainer m_robotContainer = new RobotContainer();
   
   RotationFalcon rotationRightFront;
   RotationFalcon rotationRightRear;
@@ -57,6 +58,8 @@ public class Robot extends TimedRobot {
   SwerveJoysticks joystick;
   ControllerCalculator calculator;
   PS4Controller controller;
+
+  LogCommand log = new LogCommand(0, () -> {return 2.2;}, m_robotContainer.outputStream);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -81,10 +84,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     
-    m_robotContainer.setSocket();
+    System.out.println("scheduled: " + log.isScheduled());
 
-    CommandScheduler.getInstance().schedule(new LogCommand(0, () -> {return 2.2;}, m_robotContainer.outputStream));
-    
     printEncoders();
     
     motor = new TalonFX(21);
@@ -206,11 +207,6 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    // System.out.println("falcon encoder: " + motor.getSelectedSensorPosition());
-    // System.out.println("canCoder: " + canCoder.getAbsolutePosition() + ", falcon encoder: " + falcon.getPosition());
-
-    // System.out.println(leftFrontRotation.getSelectedSensorPosition());
-    // System.out.println(rightFrontEncoder.getValue());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -241,13 +237,19 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    // CommandScheduler.getInstance().schedule(new FunctionalCommand(() -> {}, () -> {System.out.println("@");}, (Boolean bool) -> {}, () -> {return false;}));
+
+    m_robotContainer.setSocket();
+    
+    LogCommand log = new LogCommand(1, () -> {return drivingRightFront.getRpm();}, m_robotContainer.outputStream);
+    LogCommand log2 = new LogCommand(21, () -> {return rotationLeftFront.getAngle();}, m_robotContainer.outputStream);
+    
+    CommandScheduler.getInstance().schedule(log);
+    log2.schedule();
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-
-    // System.out.println("right front Kf: " + drivingRightFront.getKf(0.4));
-    // System.out.println("right rear Kf: " + drivingRightRear.getKf(0.4));
-    // System.out.println("left rear Kf: " + drivingLeftRear.getKf(0.4));
   }
 
   /** This function is called periodically during operator control. */

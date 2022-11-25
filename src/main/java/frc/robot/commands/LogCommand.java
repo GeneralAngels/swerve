@@ -29,12 +29,14 @@ public class LogCommand extends CommandBase {
   @Override
   public void execute(){
     try {
-      this.outputStream.writeShort(this.motorId);
+      this.outputStream.writeInt(motorId);
+      System.out.println(motorId + ", " + this.getValueFunction.call());
       this.outputStream.writeDouble(this.getValueFunction.call());
+      this.outputStream.flush();
     }
 
     catch (Exception exception) {
-      
+      exception.printStackTrace();
     }
 
   }

@@ -28,9 +28,7 @@ public class SwerveJoysticks extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
     Vector locationVector = this.controller.getLocationVector();
-    // System.out.println(locationVector.getAngle() + ", " + locationVector.getMagnitude());
     this.swerve.setAbsoluteSwerveVelocoties(locationVector, this.controller.getOmega());
   }
 
