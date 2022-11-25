@@ -36,7 +36,7 @@ public class LogCommand extends CommandBase {
     }
 
     catch (Exception exception) {
-      exception.printStackTrace();
+      // exception.printStackTrace();
     }
 
   }
