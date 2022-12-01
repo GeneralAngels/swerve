@@ -94,7 +94,7 @@ public class SwerveDriveTrain extends SubsystemBase {
     );
   }
 
-  public Vector get_xy_velocities() {
+  public ThreeDimensionsVector get_xy_velocities() {
     Vector rightFrontVector = rightFront.getVector();
     Vector rightRearVector = rightRear.getVector();
     Vector leftRearVector = leftRear.getVector();
