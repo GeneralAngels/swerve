@@ -12,7 +12,8 @@ import frc.robot.Utils.Vector.Representation;
 public class ControllerCalculator {
     PS4Controller controller;          
 
-    double maxSpeed = 0.8;
+    double maxSpeed = 3.5;
+    double maxOmega = 6;    
 
     public ControllerCalculator(PS4Controller controller) {
         this.controller = controller;
@@ -53,6 +54,6 @@ public class ControllerCalculator {
         if (Math.abs(value) < 0.05) {
             value = 0;
         }
-        return value * 10;
+        return value * maxOmega;
     }
 }

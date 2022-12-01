@@ -189,8 +189,8 @@ public class Robot extends TimedRobot {
     // moduleRightFront.setVector(new Vector(2, 90, Representation.Polar));
     // moduleRightRear.setVector(new Vector(2, 0, Represention.Polar));
     // swerve.setRelativeSwerveVelocoties(new Vector(0, 0, Representation.Polar), 6);
-    // joystick.execute();
-    swerve.setRelativeSwerveVelocoties(new Vector(0, 0, Representation.Polar), 2);
+    joystick.execute();
+    // swerve.setRelativeSwerveVelocoties(new Vector(0, 0, Representation.Polar), 2);
 
   }
 
@@ -242,11 +242,19 @@ public class Robot extends TimedRobot {
 
     m_robotContainer.setSocket();
     
-    LogCommand log = new LogCommand(1, () -> {return drivingRightFront.getRpm();}, m_robotContainer.outputStream);
-    LogCommand log2 = new LogCommand(21, () -> {return rotationLeftFront.getAngle();}, m_robotContainer.outputStream);
+    LogCommand rightFrontLog = new LogCommand(10, () -> {return drivingRightFront.getRpm();}, m_robotContainer.outputStream);
+    rightFrontLog.schedule();
+
+    LogCommand rightRearLog = new LogCommand(11, () -> {return drivingRightRear.getRpm();}, m_robotContainer.outputStream);
+    rightRearLog.schedule();
     
-    CommandScheduler.getInstance().schedule(log);
-    log2.schedule();
+    LogCommand leftRearLog = new LogCommand(12, () -> {return drivingLeftRear.getRpm();}, m_robotContainer.outputStream);
+    leftRearLog.schedule();
+
+    LogCommand leftFrontLog = new LogCommand(13, () -> {return drivingLeftFront.getRpm();}, m_robotContainer.outputStream);
+    leftFrontLog.schedule();
+
+    log.schedule();
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

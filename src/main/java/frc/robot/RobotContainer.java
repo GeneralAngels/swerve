@@ -25,7 +25,7 @@ public class RobotContainer {
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
-  public String IP = "172.22.11.1";
+  public String IP = "10.22.30.195";
   public int PORT = 2230;
 
   public Socket socket;
