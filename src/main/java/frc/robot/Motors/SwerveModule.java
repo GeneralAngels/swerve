@@ -6,6 +6,7 @@ package frc.robot.Motors;
 import frc.robot.Motors.abstractMotors.AbstractMotor;
 import frc.robot.Motors.falcon.RotationFalcon;
 import frc.robot.Utils.Vector;
+import frc.robot.Utils.Vector.Representation;
 
 /** Add your docs here. */
 public class SwerveModule {
@@ -22,7 +23,7 @@ public class SwerveModule {
     }
     
     public double getAngle(){
-        return rotationMotor.getDegrees();
+        return rotationMotor.getAngleByCanCoder();
     }
 
     public void setAngle(double angle){
@@ -34,11 +35,20 @@ public class SwerveModule {
     }
 
     public double getVelocity(){
+        // in meters / sec
         return movementMotor.getRpm() / rotationRatio;
     }
 
     public void setVector(Vector vector){
         this.setVelocity(vector.getMagnitude());
         this.setAngle(vector.getAngle());
+    }
+
+    public Vector getVector() {
+        return new Vector(
+            this.getVelocity(),
+            this.getAngle(),
+            Representation.Polar
+        );
     }
 }

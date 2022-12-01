@@ -108,8 +108,13 @@ public class RotationFalcon extends Falcon {
         return ((ticks / 2048) / 150) * (360 * 7);
     }
 
-    public double getAngle(){
-        return ticksToAngle(this.canCoder.getAbsolutePosition());
+    public double getAngleByCanCoder(){
+        // by canCoder
+        return this.canCoder.getAbsolutePosition() - this.homeAngle;
+    }
+
+    public double getAngleByFalcon() {
+        return ticksToAngle(this._talon.getSelectedSensorPosition(0) - tick_0);
     }
     
     @Override
