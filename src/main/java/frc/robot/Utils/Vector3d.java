@@ -5,10 +5,10 @@
 package frc.robot.Utils;
 
 /** Add your docs here. */
-public class ThreeDimensionsVector extends Vector {
+public class Vector3d extends Vector {
     double omega;
 
-    public ThreeDimensionsVector(double x, double y, double omega, Representation representation) {
+    public Vector3d(double x, double y, double omega, Representation representation) {
         super(x, y, representation);
         this.omega = omega;
     }

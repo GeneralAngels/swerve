@@ -7,7 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.time.StopWatch;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Utils.ThreeDimensionsVector;
+import frc.robot.Utils.Vector3d;
 
 public class BasicSwerveOdometry extends SubsystemBase {
   double x;
@@ -28,7 +28,7 @@ public class BasicSwerveOdometry extends SubsystemBase {
     this.swerve = swerve;
   }
 
-  public void update(double time, ThreeDimensionsVector robotVector) {
+  public void update(double time, Vector3d robotVector) {
     this.x += robotVector.getX() * time;
     this.y += robotVector.getY() * time;
     this.angle += robotVector.getOmega() * time;

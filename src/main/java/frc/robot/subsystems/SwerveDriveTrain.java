@@ -8,7 +8,7 @@ import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Motors.SwerveModule;
-import frc.robot.Utils.ThreeDimensionsVector;
+import frc.robot.Utils.Vector3d;
 import frc.robot.Utils.Vector;
 import frc.robot.Utils.Vector.Representation;
 
@@ -94,7 +94,7 @@ public class SwerveDriveTrain extends SubsystemBase {
     );
   }
 
-  public ThreeDimensionsVector get_xy_velocities() {
+  public Vector3d get_xy_velocities() {
     Vector rightFrontVector = rightFront.getVector();
     Vector rightRearVector = rightRear.getVector();
     Vector leftRearVector = leftRear.getVector();
@@ -103,7 +103,7 @@ public class SwerveDriveTrain extends SubsystemBase {
     double xVelocity = (rightFrontVector.getX() + rightRearVector.getX() + leftRearVector.getX() + leftFrontVector.getX()) / 4;
     double yVelocity = (rightFrontVector.getY() + rightRearVector.getY() + leftRearVector.getY() + leftFrontVector.getY()) / 4;
 
-    return new ThreeDimensionsVector(
+    return new Vector3d(
       xVelocity,
       yVelocity,
       (rightFrontVector.getX() - xVelocity) / -(length / 2),
