@@ -5,6 +5,7 @@
 package frc.robot.Motors.abstractMotors;
 
 /** Add your docs here. */
-public abstract class AbstractRotationMotor extends AbstractMotor {
-    public abstract void setAngle(double angle);
+public interface RotationMotorInterface extends MotorInterface {
+    public void setAngle(double angle);
+    public double getAngleByCanCoder();
 }

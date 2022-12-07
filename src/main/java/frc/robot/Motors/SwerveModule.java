@@ -3,19 +3,19 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.Motors;
-import frc.robot.Motors.abstractMotors.AbstractMotor;
-import frc.robot.Motors.falcon.RotationFalcon;
+import frc.robot.Motors.abstractMotors.MotorInterface;
+import frc.robot.Motors.abstractMotors.RotationMotorInterface;
 import frc.robot.Utils.Vector;
 import frc.robot.Utils.Vector.Representation;
 
 /** Add your docs here. */
 public class SwerveModule {
-    private AbstractMotor movementMotor;
-    private RotationFalcon rotationMotor;
+    private MotorInterface movementMotor;
+    private RotationMotorInterface rotationMotor;
 
     double rotationRatio; // how many rotations are one meter, rotation / 1 meter;
 
-    public SwerveModule(AbstractMotor movementMotor, RotationFalcon rotationMotor, double rotationRatio) {
+    public SwerveModule(MotorInterface movementMotor, RotationMotorInterface rotationMotor, double rotationRatio) {
         this.movementMotor = movementMotor;
         this.rotationMotor = rotationMotor;
         

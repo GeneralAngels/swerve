@@ -8,8 +8,10 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 
+import frc.robot.Motors.abstractMotors.RotationMotorInterface;
+
 /** Add your docs here. */
-public class RotationFalcon extends Falcon {
+public class RotationFalcon extends Falcon implements RotationMotorInterface {
     double motorOffset;
     double homeAngle;
 

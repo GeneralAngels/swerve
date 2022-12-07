@@ -4,20 +4,17 @@
 
 package frc.robot.Motors.falcon;
 
-import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
-import com.ctre.phoenix.motorcontrol.SensorTerm;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.time.StopWatch;
 
 import frc.robot.Constants;
-import frc.robot.Motors.abstractMotors.AbstractMotor;
+import frc.robot.Motors.abstractMotors.MotorInterface;
 
 
 /** Add your docs here. */
-public class Falcon extends AbstractMotor{
+public class Falcon implements MotorInterface{
     public TalonFX _talon;
     
     // Contstans:

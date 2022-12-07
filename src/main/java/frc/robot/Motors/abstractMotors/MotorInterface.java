@@ -5,13 +5,7 @@
 package frc.robot.Motors.abstractMotors;
 
 /** Add your docs here. */
-public abstract class AbstractMotor {
-    static double encoderTicksToRotation;
-    
-    public double getRotations() {
-        return this.getVelocityTicks() / encoderTicksToRotation;
-    }
-
+public interface MotorInterface {
     public abstract void setRpm(double Rpm);
     public abstract void setPrecentage(double precentage);
     
@@ -20,8 +14,4 @@ public abstract class AbstractMotor {
 
     public abstract double getRpm();
     public abstract double getVelocityTicks();
-    
-    public double getDegrees() {
-        return this.getRotations() % 1 * 360;
-    }
 }

@@ -4,10 +4,7 @@
 
 package frc.robot.Autonomous;
 
-import javax.crypto.Cipher;
-
 import com.ctre.phoenix.time.StopWatch;
-import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Basic;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Utils.Vector;

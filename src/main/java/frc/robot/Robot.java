@@ -4,23 +4,17 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
-import edu.wpi.first.wpilibj.CAN;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import frc.robot.Motors.SwerveModule;
 import frc.robot.Motors.falcon.Falcon;
 import frc.robot.Motors.falcon.RotationFalcon;
-import frc.robot.Utils.Vector;
-import frc.robot.Utils.Vector.Representation;
 import frc.robot.commands.ControllerCalculator;
 import frc.robot.commands.LogCommand;
 import frc.robot.commands.SwerveJoysticks;
