@@ -43,7 +43,7 @@ public class PathFollower extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double[] currentPoint = pathArray[(int)Math.floor(stopWatch.getDuration())];
+    double[] currentPoint = pathArray[(int) Math.floor(stopWatch.getDuration() / 0.01)];
     coordinate robotCoordinate = odometry.getRobotCoordinate();
     
     // [t, x_tag, y_tag, omega, x, y, angle]
@@ -54,7 +54,7 @@ public class PathFollower extends CommandBase {
         currentPoint[2] + (currentPoint[5] - robotCoordinate.y) * Kp,
         Representation.Cartisian
       ),     
-      currentPoint[3] + (currentPoint[6] - this.odometry.getAngle())
+      Math.toRadians(currentPoint[3]) + (currentPoint[6] - this.odometry.getAngle()) * Kp
     );
   }
 

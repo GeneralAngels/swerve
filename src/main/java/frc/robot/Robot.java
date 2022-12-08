@@ -8,16 +8,20 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Autonomous.PathFollower;
+import frc.robot.Autonomous.PathTextParser;
 import frc.robot.Motors.SwerveModule;
 import frc.robot.Motors.falcon.Falcon;
 import frc.robot.Motors.falcon.RotationFalcon;
 import frc.robot.commands.ControllerCalculator;
 import frc.robot.commands.LogCommand;
 import frc.robot.commands.SwerveJoysticks;
+import frc.robot.subsystems.BasicSwerveOdometry;
 import frc.robot.subsystems.SwerveDriveTrain;
 
 /**
@@ -215,6 +219,9 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+
+    PathTextParser textParser = new PathTextParser(Filesystem.getDeployDirectory().getAbsolutePath() + "/Path.txt");
+    m_autonomousCommand = new PathFollower(textParser.getPathArray(), 0, swerve, new BasicSwerveOdometry(0, 0, 0, swerve, new WPI_PigeonIMU(30)));
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
