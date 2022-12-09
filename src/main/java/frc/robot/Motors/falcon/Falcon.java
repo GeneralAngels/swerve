@@ -54,7 +54,6 @@ public class Falcon implements MotorInterface{
         Boolean invertSensorPhase
     )
     {
-        System.out.println("not correctly");
         // Setting feedback sensor (encoder)
         _talon.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
                                             kPIDLoopSlotIdx, 

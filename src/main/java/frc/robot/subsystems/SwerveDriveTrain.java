@@ -18,7 +18,7 @@ public class SwerveDriveTrain extends SubsystemBase {
   SwerveModule leftRear;
   SwerveModule leftFront;
 
-  WPI_PigeonIMU gyro;
+  public WPI_PigeonIMU gyro;
 
   double width; 
   double length;
@@ -44,41 +44,41 @@ public class SwerveDriveTrain extends SubsystemBase {
     this.length = length;
   }
 
-  public void setRelativeSwerveVelocoties(Vector vector, double omega) {
-    System.out.println(String.format("in swerve angle: %f, magnitude: %f", vector.getAngle(), vector.getMagnitude()));
-    
+  public void setRelativeSwerveVelocoties(Vector vector, double omega) {    
     // Module 1:
-    Vector module_1_vector = new Vector(
+    Vector rightFrontVector = new Vector(
       (vector.getX() - omega * (length / 2)), 
       (vector.getY() + omega * (width / 2)), 
       Representation.Cartisian
     );
 
+    System.out.println(String.format("magnitude given: %f", rightFrontVector.getMagnitude()));
+
     // System.out.println(String.format("rightFront vector: angle = %f, velocity = %f", vector.getAngle(), vector.getMagnitude()));
-    this.rightFront.setVector(module_1_vector);
+    this.rightFront.setVector(rightFrontVector);
 
     // Module 2:
-    Vector module_2_vector = new Vector(
+    Vector rightRearVector = new Vector(
       (vector.getX() - omega * (length / 2)), 
       (vector.getY() - omega * (width / 2)), Representation.Cartisian
     );
-    this.rightRear.setVector(module_2_vector);
+    this.rightRear.setVector(rightRearVector);
 
     // Module 3:
-    Vector module_3_vector = new Vector(
+    Vector leftFrearVector = new Vector(
       (vector.getX() + omega * (length / 2)), 
       (vector.getY() - omega * (width / 2)), 
       Representation.Cartisian
     );
-    this.leftRear.setVector(module_3_vector);
+    this.leftRear.setVector(leftFrearVector);
 
     // Module 4:
-    Vector module_4_vector = new Vector(
+    Vector leftFrontVector = new Vector(
       (vector.getX() + omega * (length / 2)), 
       (vector.getY() + omega * (width / 2)), 
       Representation.Cartisian
     );
-    this.leftFront.setVector(module_4_vector);
+    this.leftFront.setVector(leftFrontVector);
   }
 
   public void setAbsoluteSwerveVelocoties(Vector absoluteVector, double omega) {

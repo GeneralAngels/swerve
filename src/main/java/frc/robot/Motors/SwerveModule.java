@@ -42,6 +42,8 @@ public class SwerveModule {
     public void setVector(Vector vector){
         this.setVelocity(vector.getMagnitude());
         this.setAngle(vector.getAngle());
+
+        System.out.println(String.format("wanted velocity = %f, actual velocity = %f", vector.getMagnitude(), this.getVelocity()));
     }
 
     public Vector getVector() {

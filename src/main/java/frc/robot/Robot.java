@@ -7,12 +7,14 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+import com.ctre.phoenix.time.StopWatch;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import frc.robot.Autonomous.PathFollower;
 import frc.robot.Autonomous.PathTextParser;
 import frc.robot.Motors.SwerveModule;
@@ -175,7 +177,7 @@ public class Robot extends TimedRobot {
     swerve = new SwerveDriveTrain(
       moduleRightFront, moduleRightRear, moduleLeftRear, moduleLeftFront, 
       new WPI_PigeonIMU(30),
-      0.7, 0.7
+      0.6, 0.6
     );
     
     controller = new PS4Controller(0);
@@ -226,6 +228,17 @@ public class Robot extends TimedRobot {
     PathTextParser textParser = new PathTextParser(Filesystem.getDeployDirectory().getAbsolutePath() + "/Path.txt");
     m_autonomousCommand = new PathFollower(textParser.getPathArray(), 0, swerve, new BasicSwerveOdometry(0, 0, 0, swerve, new WPI_PigeonIMU(30)));
 
+    StopWatch stopWatch = new StopWatch();
+    Command turnCommand = new FunctionalCommand(
+      () -> {stopWatch.start();}, 
+      () -> {swerve.setAbsoluteSwerveVelocoties(new Vector(0, 0, Representation.Polar), Math.toRadians(90)); System.out.println(String.format("gyro angle: %f", this.swerve.gyro.getAngle()));}, 
+      (Boolean a) -> {swerve.setAbsoluteSwerveVelocoties(new Vector(0, 0, Representation.Polar), Math.toRadians(0));}, 
+      () -> {return stopWatch.getDuration() > 10;}, 
+      swerve
+    );
+
+    m_autonomousCommand = turnCommand;
+
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -234,7 +247,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    System.out.println(String.format("omega: %f", swerve.getRobotVector().getOmega()));
+  }
 
   @Override
   public void teleopInit() {

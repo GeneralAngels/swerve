@@ -55,16 +55,12 @@ public class PathFollower extends CommandBase {
       currentPoint[2] + (currentPoint[5] - robotCoordinate.y) * Kp,
       Representation.Cartisian
     );
-
-    System.out.println(String.format("1 angle: %f, magnitude: %f", movementVector.getAngle(), movementVector.getMagnitude()));
     
     movementVector.rotateVector(Math.toRadians(90));
-
-    System.out.println(String.format("2 angle: %f, magnitude: %f", movementVector.getAngle(), movementVector.getMagnitude()));
-
+    
     swerve.setAbsoluteSwerveVelocoties(
       movementVector,     
-      0
+      Math.toRadians(currentPoint[3])
     );
   }
 
