@@ -38,6 +38,7 @@ public class PathFollower extends CommandBase {
   @Override
   public void initialize() {
     stopWatch.start();
+    System.out.println("starting");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -48,13 +49,22 @@ public class PathFollower extends CommandBase {
     
     // [t, x_tag, y_tag, omega, x, y, angle]
     // [0,   1,    ,2,    ,3   ,4, 5,   6]
+
+    Vector movementVector = new Vector(
+      currentPoint[1] + (currentPoint[4] - robotCoordinate.x) * Kp,
+      currentPoint[2] + (currentPoint[5] - robotCoordinate.y) * Kp,
+      Representation.Cartisian
+    );
+
+    System.out.println(String.format("1 angle: %f, magnitude: %f", movementVector.getAngle(), movementVector.getMagnitude()));
+    
+    movementVector.rotateVector(Math.toRadians(90));
+
+    System.out.println(String.format("2 angle: %f, magnitude: %f", movementVector.getAngle(), movementVector.getMagnitude()));
+
     swerve.setAbsoluteSwerveVelocoties(
-      new Vector(
-        currentPoint[1] + (currentPoint[4] - robotCoordinate.x) * Kp,
-        currentPoint[2] + (currentPoint[5] - robotCoordinate.y) * Kp,
-        Representation.Cartisian
-      ),     
-      Math.toRadians(currentPoint[3]) + (currentPoint[6] - this.odometry.getAngle()) * Kp
+      movementVector,     
+      0
     );
   }
 

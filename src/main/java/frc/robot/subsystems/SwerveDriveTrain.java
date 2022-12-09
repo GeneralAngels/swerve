@@ -45,7 +45,7 @@ public class SwerveDriveTrain extends SubsystemBase {
   }
 
   public void setRelativeSwerveVelocoties(Vector vector, double omega) {
-    System.out.println(String.format("x_tag: %f, y_tag: %f", vector.getX(), vector.getY()));
+    System.out.println(String.format("in swerve angle: %f, magnitude: %f", vector.getAngle(), vector.getMagnitude()));
     
     // Module 1:
     Vector module_1_vector = new Vector(
@@ -53,6 +53,8 @@ public class SwerveDriveTrain extends SubsystemBase {
       (vector.getY() + omega * (width / 2)), 
       Representation.Cartisian
     );
+
+    // System.out.println(String.format("rightFront vector: angle = %f, velocity = %f", vector.getAngle(), vector.getMagnitude()));
     this.rightFront.setVector(module_1_vector);
 
     // Module 2:
@@ -86,8 +88,8 @@ public class SwerveDriveTrain extends SubsystemBase {
   }
   
   public static Vector toRelativeVector(Vector absoluteVector, double robotAngle) {
-    double robotRadiansAngle = Math.toRadians(robotAngle);
     
+    double robotRadiansAngle = Math.toRadians(robotAngle);
     // Rotation Matrix
     return new Vector(
       Math.cos(robotRadiansAngle) * absoluteVector.getX() - Math.sin(robotRadiansAngle) * absoluteVector.getY(),

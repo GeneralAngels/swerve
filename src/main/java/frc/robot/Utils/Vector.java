@@ -53,6 +53,14 @@ public class Vector {
         this.y = Math.sin(this.raidansAngle) * magnitude;
     }
 
+    public void rotateVector(double angle) {
+        this.x = Math.cos(angle) * this.getX() - Math.sin(angle) * this.getY();
+        this.y = Math.sin(angle) * this.getX() + Math.cos(angle) * this.getY();
+        this.raidansAngle = Math.atan2(y, x);
+        this.degreesAngle = Math.toDegrees(raidansAngle);
+        this.magnitude = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    }
+
     public double getX() {
         return this.x;
     }
