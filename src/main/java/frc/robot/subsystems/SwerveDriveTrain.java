@@ -45,6 +45,8 @@ public class SwerveDriveTrain extends SubsystemBase {
   }
 
   public void setRelativeSwerveVelocoties(Vector vector, double omega) {
+    System.out.println(String.format("x_tag: %f, y_tag: %f", vector.getX(), vector.getY()));
+    
     // Module 1:
     Vector module_1_vector = new Vector(
       (vector.getX() - omega * (length / 2)), 

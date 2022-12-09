@@ -18,6 +18,8 @@ import frc.robot.Autonomous.PathTextParser;
 import frc.robot.Motors.SwerveModule;
 import frc.robot.Motors.falcon.Falcon;
 import frc.robot.Motors.falcon.RotationFalcon;
+import frc.robot.Utils.Vector;
+import frc.robot.Utils.Vector.Representation;
 import frc.robot.commands.ControllerCalculator;
 import frc.robot.commands.LogCommand;
 import frc.robot.commands.SwerveJoysticks;
@@ -79,7 +81,7 @@ public class Robot extends TimedRobot {
   
    @Override
   public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+    // Instantiate our RobotContainer.  This will perform all our button bindings, and put ourP
     // autonomous chooser on the dashboard.
     
     System.out.println("scheduled: " + log.isScheduled());
@@ -187,7 +189,8 @@ public class Robot extends TimedRobot {
     // moduleRightFront.setVector(new Vector(2, 90, Representation.Polar));
     // moduleRightRear.setVector(new Vector(2, 0, Represention.Polar));
     // swerve.setRelativeSwerveVelocoties(new Vector(0, 0, Representation.Polar), 6);
-    joystick.execute();
+    // joystick.execute();
+    swerve.setRelativeSwerveVelocoties(new Vector(0, 2, Representation.Cartisian), 0);
     // swerve.setRelativeSwerveVelocoties(new Vector(0, 0, Representation.Polar), 2);
 
   }
