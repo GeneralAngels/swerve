@@ -166,13 +166,13 @@ public class Robot extends TimedRobot {
       8.14
     );
     moduleRightFront = new SwerveModule(drivingRightFront, rotationRightFront, 
-                                        1 / (2 * Math.PI * 0.19) * 60);
+                                        1 / (2 * Math.PI * 0.0508) * 60);
     moduleRightRear = new SwerveModule(drivingRightRear, rotationRightRear, 
-                                        1 / (2 * Math.PI * 0.19) * 60);
+                                        1 / (2 * Math.PI * 0.0508) * 60);
     moduleLeftFront = new SwerveModule(drivingLeftFront, rotationLeftFront, 
-                                        1 / (2 * Math.PI * 0.19) * 60);
+                                        1 / (2 * Math.PI * 0.0508) * 60);
     moduleLeftRear = new SwerveModule(drivingLeftRear, rotationLeftRear, 
-                                        1 / (2 * Math.PI * 0.19) * 60);
+                                        1 / (2 * Math.PI * 0.0508) * 60);
     
     swerve = new SwerveDriveTrain(
       moduleRightFront, moduleRightRear, moduleLeftRear, moduleLeftFront, 
@@ -223,6 +223,8 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    this.swerve.gyro.reset();
+
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     PathTextParser textParser = new PathTextParser(Filesystem.getDeployDirectory().getAbsolutePath() + "/Path.txt");
@@ -231,9 +233,9 @@ public class Robot extends TimedRobot {
     StopWatch stopWatch = new StopWatch();
     Command turnCommand = new FunctionalCommand(
       () -> {stopWatch.start();}, 
-      () -> {swerve.setAbsoluteSwerveVelocoties(new Vector(0, 0, Representation.Polar), Math.toRadians(90)); System.out.println(String.format("gyro angle: %f", this.swerve.gyro.getAngle()));}, 
+      () -> {swerve.setAbsoluteSwerveVelocoties(new Vector(0, 0, Representation.Polar), Math.toRadians(50));}, 
       (Boolean a) -> {swerve.setAbsoluteSwerveVelocoties(new Vector(0, 0, Representation.Polar), Math.toRadians(0));}, 
-      () -> {return stopWatch.getDuration() > 10;}, 
+      () -> {return stopWatch.getDuration() > 2;}, 
       swerve
     );
 
@@ -248,7 +250,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    System.out.println(String.format("omega: %f", swerve.getRobotVector().getOmega()));
+    System.out.println(String.format("gyro angle: %f, calculateOmega: %f", this.swerve.gyro.getAngle(), this.swerve.getRobotVector().getOmega()));
   }
 
   @Override
