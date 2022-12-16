@@ -13,13 +13,13 @@ public class SwerveModule {
     private MotorInterface movementMotor;
     private RotationMotorInterface rotationMotor;
 
-    double rotationRatio; // how many rotations are one meter, rotation / 1 meter;
+    double RotationToMetersRatio; // how many rotations are one meter, rotation / 1 meter;
 
-    public SwerveModule(MotorInterface movementMotor, RotationMotorInterface rotationMotor, double rotationRatio) {
+    public SwerveModule(MotorInterface movementMotor, RotationMotorInterface rotationMotor, double RotationToMetersRatio) {
         this.movementMotor = movementMotor;
         this.rotationMotor = rotationMotor;
         
-        this.rotationRatio = rotationRatio;
+        this.RotationToMetersRatio = RotationToMetersRatio;
     }
     
     public double getAngle(){
@@ -31,12 +31,12 @@ public class SwerveModule {
     }
 
     public void setVelocity(double metersPerSecond){
-        movementMotor.setRpm(metersPerSecond * rotationRatio);
+        movementMotor.setRpm(metersPerSecond * RotationToMetersRatio);
     }
 
     public double getVelocity(){
         // in meters / sec
-        return movementMotor.getRpm() / rotationRatio;
+        return movementMotor.getRpm() / RotationToMetersRatio;
     }
 
     public void setVector(Vector vector){

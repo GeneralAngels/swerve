@@ -28,12 +28,12 @@ public class Falcon implements MotorInterface{
         int kPIDLoopSlotIdx,
         double peakOutputForward, double peakOutputReverse,
         double Kf, double Kp, double Ki, double Kd,
-        double gearRatio
+        double MotorToActualRatio
     ) 
     {
         this._talon = talon;
 
-        this.rpmToUnitsRatioVelocity = this.rpmToUnitsRatioVelocity * gearRatio;
+        this.rpmToUnitsRatioVelocity = this.rpmToUnitsRatioVelocity * MotorToActualRatio;
 
         this._talon.configNeutralDeadband(0.001); // setting the minimal Deadband
 
