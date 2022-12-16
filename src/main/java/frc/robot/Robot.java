@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import com.ctre.phoenix.time.StopWatch;
 
@@ -17,16 +15,12 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import frc.robot.Autonomous.PathFollower;
 import frc.robot.Autonomous.PathTextParser;
-import frc.robot.Motors.SwerveModule;
-import frc.robot.Motors.falcon.Falcon;
-import frc.robot.Motors.falcon.RotationFalcon;
+import frc.robot.SwerveContainer.SwerveContainer;
 import frc.robot.Utils.Vector;
 import frc.robot.Utils.Vector.Representation;
-import frc.robot.commands.ControllerCalculator;
 import frc.robot.commands.LogCommand;
 import frc.robot.commands.SwerveJoysticks;
 import frc.robot.subsystems.BasicSwerveOdometry;
-import frc.robot.subsystems.SwerveDriveTrain;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -37,165 +31,26 @@ import frc.robot.subsystems.SwerveDriveTrain;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
-  TalonFX motor;
-  CANCoder canCoder = new CANCoder(1);
-
   private RobotContainer m_robotContainer = new RobotContainer();
-  
-  RotationFalcon rotationRightFront;
-  RotationFalcon rotationRightRear;
-  RotationFalcon rotationLeftRear;
-  RotationFalcon rotationLeftFront;
+  SwerveContainer swerveContainer = new SwerveContainer();
 
-  Falcon drivingRightFront;
-  Falcon drivingRightRear;
-  Falcon drivingLeftRear;
-  Falcon drivingLeftFront;
-
-  SwerveModule moduleRightFront;
-  SwerveModule moduleRightRear;
-  SwerveModule moduleLeftFront;
-  SwerveModule moduleLeftRear;
-  SwerveDriveTrain swerve;
-  SwerveJoysticks joystick;
-  ControllerCalculator calculator;
-  PS4Controller controller;
+  PS4Controller controller = new PS4Controller(0);
+  Command joysticksCommand = new SwerveJoysticks(controller, swerveContainer.swerve);
 
   LogCommand log = new LogCommand(0, () -> {return 2.2;}, m_robotContainer.outputStream);
 
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
-   */
-  public void printEncoders() {
-    CANCoder rightFrontEncoder = new CANCoder(1);
-    System.out.println("right front encoder: " + rightFrontEncoder.getAbsolutePosition());
-
-    CANCoder rightRearEncoder = new CANCoder(2);
-    System.out.println("right rear encoder: " + rightRearEncoder.getAbsolutePosition());
-
-    CANCoder leftRearEncoder = new CANCoder(3);
-    System.out.println("left rear encoder: " + leftRearEncoder.getAbsolutePosition());
-
-    CANCoder leftFrontEncoder = new CANCoder(4);
-    System.out.println("left front encoder: " + leftFrontEncoder.getAbsolutePosition());
-  }
-  
-   @Override
+   */  
+  @Override
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put ourP
-    // autonomous chooser on the dashboard.
-    
-    System.out.println("scheduled: " + log.isScheduled());
-
-    printEncoders();
-    
-    motor = new TalonFX(21);
-    rotationRightFront = new RotationFalcon(
-      motor, 1, 
-      0, 
-      0.6, -0.6, 
-      0, 0.2, 0.0, 0.0, 
-      0, Constants.SwerveConstants.homeFrontRightAngle, 
-      true, true
-    );
-    rotationRightFront.setFalconEncoder();
-
-    motor = new TalonFX(22);
-    rotationRightRear = new RotationFalcon(
-      motor, 2, 
-      0, 
-      0.6, -0.6, 
-      0, 0.2, 0.0, 0.0, 
-      0, Constants.SwerveConstants.homeRearRightAngle, 
-      true, true
-    );
-    rotationRightRear.setFalconEncoder();
-
-    motor = new TalonFX(23);
-    rotationLeftRear = new RotationFalcon(
-      motor, 3, 
-      0, 
-      0.6, -0.6, 
-      0, 0.2, 0.0, 0.0, 
-      0, Constants.SwerveConstants.homeRearLeftAngle, 
-      true, true
-    );
-    rotationLeftRear.setFalconEncoder();
-
-    motor = new TalonFX(24);
-    rotationLeftFront = new RotationFalcon(
-      motor, 4, 
-      0, 
-      0.6, -0.6, 
-      0, 0.2, 0.0, 0.0, 
-      0, Constants.SwerveConstants.homeFrontLeftAngle, 
-      true, true
-    );
-    rotationLeftFront.setFalconEncoder();
-    
-    drivingRightFront = new Falcon(
-      new TalonFX(11), 
-      0, 
-      0.7, -0.7, 
-      0.045, 0.06, 0, 0,
-      8.14
-    );
-
-    drivingRightRear = new Falcon(
-      new TalonFX(12), 
-      0, 
-      0.7, -0.7, 
-      0.045, 0.06, 0, 0,
-      8.14
-    );
-
-    drivingLeftRear = new Falcon(
-      new TalonFX(13), 
-      0, 
-      0.7, -0.7, 
-      0.045, 0.06, 0, 0,
-      8.14
-    );
-
-    drivingLeftFront = new Falcon(
-      new TalonFX(14), 
-      0, 
-      0.7, -0.7, 
-      0.045, 0.06, 0, 0,
-      8.14
-    );
-    moduleRightFront = new SwerveModule(drivingRightFront, rotationRightFront, 
-                                        1 / (2 * Math.PI * 0.0508) * 60);
-    moduleRightRear = new SwerveModule(drivingRightRear, rotationRightRear, 
-                                        1 / (2 * Math.PI * 0.0508) * 60);
-    moduleLeftFront = new SwerveModule(drivingLeftFront, rotationLeftFront, 
-                                        1 / (2 * Math.PI * 0.0508) * 60);
-    moduleLeftRear = new SwerveModule(drivingLeftRear, rotationLeftRear, 
-                                        1 / (2 * Math.PI * 0.0508) * 60);
-    
-    swerve = new SwerveDriveTrain(
-      moduleRightFront, moduleRightRear, moduleLeftRear, moduleLeftFront, 
-      new WPI_PigeonIMU(30),
-      0.6, 0.6
-    );
-    
-    controller = new PS4Controller(0);
-    joystick = new SwerveJoysticks(controller, swerve);
+    // autonomous chooser on the dashboard
   }
 
   @Override
-  public void teleopPeriodic() {
-    // moduleLeftFront.setVector(new Vector(2, 90, Representation.Polar));
-    // moduleLeftRear.setVector(new Vector(2, 90, Representation.Polar));
-    // moduleRightFront.setVector(new Vector(2, 90, Representation.Polar));
-    // moduleRightRear.setVector(new Vector(2, 0, Represention.Polar));
-    // swerve.setRelativeSwerveVelocoties(new Vector(0, 0, Representation.Polar), 6);
-    joystick.execute();
-    // swerve.setAbsoluteSwerveVelocoties(new Vector(-2, 0, Representation.Cartisian), 0);
-    // swerve.setRelativeSwerveVelocoties(new Vector(0, 0, Representation.Polar), 2);
-
-  }
+  public void teleopPeriodic() {}
 
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
@@ -223,20 +78,20 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    this.swerve.gyro.reset();
+    this.swerveContainer.swerve.gyro.reset();
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     PathTextParser textParser = new PathTextParser(Filesystem.getDeployDirectory().getAbsolutePath() + "/Path.txt");
-    m_autonomousCommand = new PathFollower(textParser.getPathArray(), 0, swerve, new BasicSwerveOdometry(0, 0, 0, swerve, new WPI_PigeonIMU(30)));
+    m_autonomousCommand = new PathFollower(textParser.getPathArray(), 0, this.swerveContainer.swerve, new BasicSwerveOdometry(0, 0, 0, this.swerveContainer.swerve, new WPI_PigeonIMU(30)));
 
     StopWatch stopWatch = new StopWatch();
     Command turnCommand = new FunctionalCommand(
       () -> {stopWatch.start();}, 
-      () -> {swerve.setAbsoluteSwerveVelocoties(new Vector(0, 0, Representation.Polar), Math.toRadians(50));}, 
-      (Boolean a) -> {swerve.setAbsoluteSwerveVelocoties(new Vector(0, 0, Representation.Polar), Math.toRadians(0));}, 
+      () -> {this.swerveContainer.swerve.setAbsoluteSwerveVelocoties(new Vector(0, 0, Representation.Polar), Math.toRadians(50));}, 
+      (Boolean a) -> {this.swerveContainer.swerve.setAbsoluteSwerveVelocoties(new Vector(0, 0, Representation.Polar), Math.toRadians(0));}, 
       () -> {return stopWatch.getDuration() > 2;}, 
-      swerve
+      swerveContainer.swerve
     );
 
     m_autonomousCommand = turnCommand;
@@ -250,7 +105,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    System.out.println(String.format("gyro angle: %f, calculateOmega: %f", this.swerve.gyro.getAngle(), this.swerve.getRobotVector().getOmega()));
   }
 
   @Override
@@ -259,27 +113,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    // CommandScheduler.getInstance().schedule(new FunctionalCommand(() -> {}, () -> {System.out.println("@");}, (Boolean bool) -> {}, () -> {return false;}));
-
-    m_robotContainer.setSocket();
-    
-    LogCommand rightFrontLog = new LogCommand(10, () -> {return drivingRightFront.getRpm();}, m_robotContainer.outputStream);
-    rightFrontLog.schedule();
-
-    LogCommand rightRearLog = new LogCommand(11, () -> {return drivingRightRear.getRpm();}, m_robotContainer.outputStream);
-    rightRearLog.schedule();
-    
-    LogCommand leftRearLog = new LogCommand(12, () -> {return drivingLeftRear.getRpm();}, m_robotContainer.outputStream);
-    leftRearLog.schedule();
-
-    LogCommand leftFrontLog = new LogCommand(13, () -> {return drivingLeftFront.getRpm();}, m_robotContainer.outputStream);
-    leftFrontLog.schedule();
-
-    log.schedule();
-
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
+    joysticksCommand.schedule();
   }
 
   /** This function is called periodically during operator control. */

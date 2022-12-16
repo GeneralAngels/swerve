@@ -57,7 +57,7 @@ public class Falcon implements MotorInterface{
         // Setting feedback sensor (encoder)
         _talon.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
                                             kPIDLoopSlotIdx, 
-											kTimeoutMs); //TODO: Solve for using absoulute encoder
+											kTimeoutMs);
         
         // Config peak and minimal values:
         _talon.configNominalOutputForward(0, kTimeoutMs);

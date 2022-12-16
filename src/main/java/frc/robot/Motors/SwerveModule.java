@@ -15,11 +15,11 @@ public class SwerveModule {
 
     double RotationToMetersRatio; // how many rotations are one meter, rotation / 1 meter;
 
-    public SwerveModule(MotorInterface movementMotor, RotationMotorInterface rotationMotor, double RotationToMetersRatio) {
+    public SwerveModule(MotorInterface movementMotor, RotationMotorInterface rotationMotor, double wheelRadius) {
         this.movementMotor = movementMotor;
         this.rotationMotor = rotationMotor;
         
-        this.RotationToMetersRatio = RotationToMetersRatio;
+        this.RotationToMetersRatio = 1 / (2 * Math.PI * wheelRadius) * 60;
     }
     
     public double getAngle(){
