@@ -13,15 +13,14 @@ import frc.robot.Motors.abstractMotors.RotationMotorInterface;
 /** Add your docs here. */
 public class RotationFalcon extends Falcon implements RotationMotorInterface {
     double homeAngle;
-
-    int CANCoderPort;
+    double tick_0;    
     double direction = 1;
-
     double offsetConstant;
 
-    public CANCoder canCoder;
+    double drivingToDrivenGearRatio;
 
-    double tick_0;
+    int CANCoderPort;
+    public CANCoder canCoder;
 
     public RotationFalcon
     (
@@ -30,12 +29,13 @@ public class RotationFalcon extends Falcon implements RotationMotorInterface {
         int kPIDLoopIdx,
         double peakOutputForward, double peakOutputReverse,
         double Kf, double Kp, double Ki, double Kd,
-        double homeAngle,
+        double homeAngle, double drivingToDrivenGearRatio,
         Boolean inverted, Boolean invertSensorPhase
     ) 
     {
         super(talon, kPIDLoopIdx, peakOutputForward, peakOutputReverse, Kf, Kp, Ki, Kd, 1);
 
+        this.drivingToDrivenGearRatio = drivingToDrivenGearRatio;
         this.homeAngle = homeAngle;
         this.CANCoderPort = CANCoderPort;
         this.canCoder = new CANCoder(CANCoderPort);
@@ -94,11 +94,11 @@ public class RotationFalcon extends Falcon implements RotationMotorInterface {
     }
 
     public double anglesToTicks(double angles) {
-        return angles * 2048 * 150 / (360 * 7); // TODO: Replace to constants
+        return angles * 2048 / 360 * drivingToDrivenGearRatio; // TODO: Turn to constants
     }
     
     public double ticksToAngle(double ticks){
-        return ((ticks / 2048) / 150) * (360 * 7); // TODO: Replace with constatns
+        return ((ticks / 2048)) * 360 / drivingToDrivenGearRatio; // TODO: Replace with constatns
     }
 
     public double getAngleByCanCoder(){

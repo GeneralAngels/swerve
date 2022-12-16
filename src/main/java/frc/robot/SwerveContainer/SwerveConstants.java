@@ -8,7 +8,8 @@ package frc.robot.SwerveContainer;
 public class SwerveConstants {
     // Swerve gears and wheels: 
     public static final double wheelRadius = 0.0508;
-    public static final double MotorToDrivenRatio = 8.14 / 1;
+    public static final double Driving_MotorToDrivenRatio = 8.14 / 1;
+    public static final double Rotation_MotorToDrivenRatio = 150 / 7;
 
     public static final double swerveWidth = 0.6;
     public static final double swerveLength = 0.6;

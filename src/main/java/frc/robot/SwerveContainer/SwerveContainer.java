@@ -23,7 +23,7 @@ public class SwerveContainer {
         0, 
         0.7, -0.7, 
         SwerveConstants.Drive_Kf, SwerveConstants.Drive_Kp, SwerveConstants.Drive_Ki, SwerveConstants.Drive_Kd,
-        SwerveConstants.MotorToDrivenRatio
+        SwerveConstants.Driving_MotorToDrivenRatio
     );
 
     Falcon drivingRightRear = new Falcon(
@@ -31,7 +31,7 @@ public class SwerveContainer {
         0, 
         0.7, -0.7, 
         SwerveConstants.Drive_Kf, SwerveConstants.Drive_Kp, SwerveConstants.Drive_Ki, SwerveConstants.Drive_Kd,
-        SwerveConstants.MotorToDrivenRatio
+        SwerveConstants.Driving_MotorToDrivenRatio
     );
     
     Falcon drivingLeftRear = new Falcon(
@@ -39,7 +39,7 @@ public class SwerveContainer {
         0, 
         0.7, -0.7, 
         SwerveConstants.Drive_Kf, SwerveConstants.Drive_Kp, SwerveConstants.Drive_Ki, SwerveConstants.Drive_Kd,
-        SwerveConstants.MotorToDrivenRatio
+        SwerveConstants.Driving_MotorToDrivenRatio
     );
     
     Falcon drivingLeftFront = new Falcon(
@@ -47,7 +47,7 @@ public class SwerveContainer {
         0, 
         0.7, -0.7, 
         SwerveConstants.Drive_Kf, SwerveConstants.Drive_Kp, SwerveConstants.Drive_Ki, SwerveConstants.Drive_Kd,
-        SwerveConstants.MotorToDrivenRatio
+        SwerveConstants.Driving_MotorToDrivenRatio
     );
 
     // Setting Rotation Motors:
@@ -55,6 +55,7 @@ public class SwerveContainer {
       new TalonFX(21), 1, 
       0, 
       0.6, -0.6, 
+      SwerveConstants.Rotation_MotorToDrivenRatio,
       SwerveConstants.Rotation_Kf, SwerveConstants.Rotation_Ki, SwerveConstants.Rotation_Kd, SwerveConstants.Rotation_Kd, 
       SwerveConstants.homeFrontRightAngle, 
       true, true
@@ -64,6 +65,7 @@ public class SwerveContainer {
       new TalonFX(22), 2,
       0, 
       0.6, -0.6, 
+      SwerveConstants.Rotation_MotorToDrivenRatio,
       SwerveConstants.Rotation_Kf, SwerveConstants.Rotation_Ki, SwerveConstants.Rotation_Kd, SwerveConstants.Rotation_Kd, 
       SwerveConstants.homeFrontRightAngle, 
       true, true
@@ -73,6 +75,7 @@ public class SwerveContainer {
       new TalonFX(23), 3, 
       0, 
       0.6, -0.6, 
+      SwerveConstants.Rotation_MotorToDrivenRatio,
       SwerveConstants.Rotation_Kf, SwerveConstants.Rotation_Ki, SwerveConstants.Rotation_Kd, SwerveConstants.Rotation_Kd, 
       SwerveConstants.homeFrontRightAngle, 
       true, true
@@ -82,6 +85,7 @@ public class SwerveContainer {
       new TalonFX(24), 4, 
       0, 
       0.6, -0.6, 
+      SwerveConstants.Rotation_MotorToDrivenRatio,
       SwerveConstants.Rotation_Kf, SwerveConstants.Rotation_Ki, SwerveConstants.Rotation_Kd, SwerveConstants.Rotation_Kd, 
       SwerveConstants.homeFrontRightAngle, 
       true, true
