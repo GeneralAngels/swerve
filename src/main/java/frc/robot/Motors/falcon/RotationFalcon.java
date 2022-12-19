@@ -17,6 +17,7 @@ public class RotationFalcon extends Falcon implements RotationMotorInterface {
     double direction = 1;
     double offsetConstant;
 
+    public Boolean isFlipeed = false;
     double drivingToDrivenGearRatio;
 
     int CANCoderPort;
@@ -39,6 +40,10 @@ public class RotationFalcon extends Falcon implements RotationMotorInterface {
         this.homeAngle = homeAngle;
         this.CANCoderPort = CANCoderPort;
         this.canCoder = new CANCoder(CANCoderPort);
+    }
+
+    public void changeFlipped() {
+        isFlipeed = !isFlipeed;
     }
 
     @Override
@@ -106,7 +111,12 @@ public class RotationFalcon extends Falcon implements RotationMotorInterface {
     }
 
     public double getAngleByFalcon() {
-        return ticksToAngle(this._talon.getSelectedSensorPosition(0) - tick_0);
+        if (isFlipeed) {
+            return -(360 - ticksToAngle(this._talon.getSelectedSensorPosition(0) - tick_0));
+        }
+        else {
+            return ticksToAngle(this._talon.getSelectedSensorPosition(0) - tick_0);
+        }
     }
     
     @Override

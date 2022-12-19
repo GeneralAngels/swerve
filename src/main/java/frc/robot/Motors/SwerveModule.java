@@ -35,10 +35,13 @@ public class SwerveModule {
         double currentAngle = this.getAngle();
         System.out.println(String.format("curent angle: %f, angle: %f, lower bound: %f, upper bound: %f", currentAngle, angle, angle - 90, angle + 90));
         if (currentAngle > angle - 90 && currentAngle < angle + 90) {
+            direction = 1;
             rotationMotor.setAngle(angle);
         }
         else {
             rotationMotor.setAngle(angle + 180);
+            direction = -1;
+            rotationMotor.changeFlipped();
         }
     }
 
