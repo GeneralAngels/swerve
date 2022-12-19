@@ -8,4 +8,5 @@ package frc.robot.Motors.abstractMotors;
 public interface RotationMotorInterface extends MotorInterface {
     public void setAngle(double angle);
     public double getAngleByCanCoder();
+    public void setEncoder();
 }

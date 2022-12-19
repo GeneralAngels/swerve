@@ -55,19 +55,19 @@ public class SwerveContainer {
       new TalonFX(21), 1, 
       0, 
       0.6, -0.6, 
-      SwerveConstants.Rotation_MotorToDrivenRatio,
-      SwerveConstants.Rotation_Kf, SwerveConstants.Rotation_Ki, SwerveConstants.Rotation_Kd, SwerveConstants.Rotation_Kd, 
+      SwerveConstants.Rotation_Kf, SwerveConstants.Rotation_Kp, SwerveConstants.Rotation_Ki, SwerveConstants.Rotation_Kd, 
       SwerveConstants.homeFrontRightAngle, 
+      SwerveConstants.Rotation_MotorToDrivenRatio,
       true, true
     );
 
     RotationFalcon rotationRightRear = new RotationFalcon(
-      new TalonFX(22), 2,
+      new TalonFX(22), 2, 
       0, 
       0.6, -0.6, 
+      SwerveConstants.Rotation_Kf, SwerveConstants.Rotation_Kp, SwerveConstants.Rotation_Ki, SwerveConstants.Rotation_Kd, 
+      SwerveConstants.homeRearRightAngle, 
       SwerveConstants.Rotation_MotorToDrivenRatio,
-      SwerveConstants.Rotation_Kf, SwerveConstants.Rotation_Ki, SwerveConstants.Rotation_Kd, SwerveConstants.Rotation_Kd, 
-      SwerveConstants.homeFrontRightAngle, 
       true, true
     );
     
@@ -75,9 +75,9 @@ public class SwerveContainer {
       new TalonFX(23), 3, 
       0, 
       0.6, -0.6, 
+      SwerveConstants.Rotation_Kf, SwerveConstants.Rotation_Kp, SwerveConstants.Rotation_Ki, SwerveConstants.Rotation_Kd, 
+      SwerveConstants.homeRearLeftAngle, 
       SwerveConstants.Rotation_MotorToDrivenRatio,
-      SwerveConstants.Rotation_Kf, SwerveConstants.Rotation_Ki, SwerveConstants.Rotation_Kd, SwerveConstants.Rotation_Kd, 
-      SwerveConstants.homeFrontRightAngle, 
       true, true
     );
     
@@ -85,9 +85,9 @@ public class SwerveContainer {
       new TalonFX(24), 4, 
       0, 
       0.6, -0.6, 
+      SwerveConstants.Rotation_Kf, SwerveConstants.Rotation_Kp, SwerveConstants.Rotation_Ki, SwerveConstants.Rotation_Kd, 
+      SwerveConstants.homeFrontLeftAngle, 
       SwerveConstants.Rotation_MotorToDrivenRatio,
-      SwerveConstants.Rotation_Kf, SwerveConstants.Rotation_Ki, SwerveConstants.Rotation_Kd, SwerveConstants.Rotation_Kd, 
-      SwerveConstants.homeFrontRightAngle, 
       true, true
     );
 

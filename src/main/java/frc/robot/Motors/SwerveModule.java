@@ -16,6 +16,7 @@ public class SwerveModule {
     double RotationToMetersRatio; // how many rotations are one meter, rotation / 1 meter;
 
     public SwerveModule(MotorInterface movementMotor, RotationMotorInterface rotationMotor, double wheelRadius) {
+        rotationMotor.setEncoder();
         this.movementMotor = movementMotor;
         this.rotationMotor = rotationMotor;
         

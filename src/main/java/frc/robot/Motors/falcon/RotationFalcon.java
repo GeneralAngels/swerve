@@ -86,7 +86,7 @@ public class RotationFalcon extends Falcon implements RotationMotorInterface {
         this.setPosition(finalTarget);
     }
 
-    public void setFalconEncoder() {
+    public void setEncoder() {
         double a = this.anglesToTicks(this.homeAngle - this.canCoder.getAbsolutePosition());
         double y = this._talon.getSelectedSensorPosition(0);
 
