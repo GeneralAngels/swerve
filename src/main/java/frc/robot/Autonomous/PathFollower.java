@@ -60,7 +60,7 @@ public class PathFollower extends CommandBase {
     
     swerve.setAbsoluteSwerveVelocoties(
       movementVector,     
-      Math.toRadians(currentPoint[3])
+      Math.toRadians(currentPoint[3]) + (odometry.getAngle() - currentPoint[6]) * Kp
     );
   }
 

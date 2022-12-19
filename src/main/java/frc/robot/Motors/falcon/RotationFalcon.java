@@ -94,11 +94,12 @@ public class RotationFalcon extends Falcon implements RotationMotorInterface {
     }
 
     public double anglesToTicks(double angles) {
-        return angles * 2048 / 360 * drivingToDrivenGearRatio; // TODO: Turn to constants
+        return angles * 2048 / 360 * drivingToDrivenGearRatio;
     }
     
     public double ticksToAngle(double ticks){
-        return ((ticks / 2048)) * 360 / drivingToDrivenGearRatio; // TODO: Replace with constatns
+        return (ticks / 2048) * 360 / drivingToDrivenGearRatio; // TODO: Replace with constatns
+        // TODO: Add % full angle to decrease unties
     }
 
     public double getAngleByCanCoder(){
