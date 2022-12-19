@@ -50,7 +50,9 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    joysticksCommand.execute();
+  }
 
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
@@ -113,7 +115,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    joysticksCommand.schedule();
+    
   }
 
   /** This function is called periodically during operator control. */
