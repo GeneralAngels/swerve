@@ -9,4 +9,5 @@ public interface RotationMotorInterface extends MotorInterface {
     public void setAngle(double angle);
     public double getAngleByCanCoder();
     public void setEncoder();
+    public double getAngleByFalcon();
 }

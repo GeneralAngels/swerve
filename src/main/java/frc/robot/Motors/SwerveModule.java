@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.Motors;
+import com.fasterxml.jackson.databind.deser.impl.CreatorCandidate;
+
 import frc.robot.Motors.abstractMotors.MotorInterface;
 import frc.robot.Motors.abstractMotors.RotationMotorInterface;
 import frc.robot.Utils.Vector;
@@ -12,6 +14,8 @@ import frc.robot.Utils.Vector.Representation;
 public class SwerveModule {
     private MotorInterface movementMotor;
     private RotationMotorInterface rotationMotor;
+
+    double direction = 1;
 
     double RotationToMetersRatio; // how many rotations are one meter, rotation / 1 meter;
 
@@ -24,15 +28,22 @@ public class SwerveModule {
     }
     
     public double getAngle(){
-        return rotationMotor.getAngleByCanCoder();
+        return rotationMotor.getAngleByFalcon();
     }
 
     public void setAngle(double angle){
-        rotationMotor.setAngle(angle);
+        double currentAngle = this.getAngle();
+        System.out.println(String.format("curent angle: %f, angle: %f, lower bound: %f, upper bound: %f", currentAngle, angle, angle - 90, angle + 90));
+        if (currentAngle > angle - 90 && currentAngle < angle + 90) {
+            rotationMotor.setAngle(angle);
+        }
+        else {
+            rotationMotor.setAngle(angle + 180);
+        }
     }
 
     public void setVelocity(double metersPerSecond){
-        movementMotor.setRpm(metersPerSecond * RotationToMetersRatio);
+        movementMotor.setRpm(metersPerSecond * RotationToMetersRatio * direction);
     }
 
     public double getVelocity(){
