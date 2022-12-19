@@ -4,8 +4,6 @@
 
 package frc.robot.commands;
 
-import java.time.LocalDate;
-
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Utils.Vector;
@@ -31,7 +29,7 @@ public class SwerveJoysticks extends CommandBase {
   @Override
   public void execute() {
     Vector locationVector = this.controller.getLocationVector();
-    this.swerve.setRelativeSwerveVelocoties(locationVector, this.controller.getOmega());
+    this.swerve.setAbsoluteSwerveVelocoties(locationVector, this.controller.getOmega());
   }
 
   // Called once the command ends or is interrupted.
