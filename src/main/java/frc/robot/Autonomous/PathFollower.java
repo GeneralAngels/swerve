@@ -15,15 +15,19 @@ import frc.robot.subsystems.coordinate;
 
 public class PathFollower extends CommandBase {
   SwerveDriveTrain swerve;
+  
   double Kp;
+  double Kp_a;
+
   double[][] pathArray;
 
   StopWatch stopWatch = new StopWatch();
+  double lastTime;
 
   BasicSwerveOdometry odometry;
   
   /** Creates a new PathFollower. */
-  public PathFollower(double[][] pathArray, double Kp, SwerveDriveTrain swerve, BasicSwerveOdometry odometry) {
+  public PathFollower(double[][] pathArray, double Kp, double Kp_a, SwerveDriveTrain swerve, BasicSwerveOdometry odometry) {
     addRequirements(swerve);
     // Use addRequirements() here to declare subsystem dependencies.
 
@@ -32,6 +36,7 @@ public class PathFollower extends CommandBase {
     this.pathArray = pathArray;
 
     this.odometry = odometry;
+    lastTime = pathArray[pathArray.length - 1][0];
   }
 
   // Called when the command is initially scheduled.
@@ -46,31 +51,43 @@ public class PathFollower extends CommandBase {
   public void execute() {
     double[] currentPoint = pathArray[(int) Math.floor(stopWatch.getDuration() / 0.01)];
     coordinate robotCoordinate = odometry.getRobotCoordinate();
+
+    Vector robotVector = new Vector(robotCoordinate.x, robotCoordinate.y, Representation.Cartisian);
     
     // [t, x_tag, y_tag, omega, x, y, angle]
     // [0,   1,    ,2,    ,3   ,4, 5,   6]
 
+    System.out.println(String.format("wanted x: %f, wanted y: %f, wanted angle: %f", currentPoint[4], currentPoint[5], currentPoint[6]));
+    System.out.println(String.format("x: %f, y: %f, angle: %f", robotVector.getX(), robotVector.getY(), odometry.getAngle()));
+
     Vector movementVector = new Vector(
-      currentPoint[1] + (currentPoint[4] - robotCoordinate.x) * Kp,
-      currentPoint[2] + (currentPoint[5] - robotCoordinate.y) * Kp,
+      currentPoint[1] + (currentPoint[4] - robotVector.getX()) * Kp,
+      currentPoint[2] + (currentPoint[5] - robotVector.getY()) * Kp,
       Representation.Cartisian
     );
+
     
     movementVector.rotateVector(Math.toRadians(90));
+
+    System.out.println(String.format("x_tag: %f, y_tag: %f", movementVector.getX(), movementVector.getY()));
+
     
     swerve.setAbsoluteSwerveVelocoties(
-      movementVector,     
-      Math.toRadians(currentPoint[3]) + (odometry.getAngle() - currentPoint[6]) * Kp
+      new Vector(movementVector.getX(), movementVector.getY(), Representation.Cartisian),     
+      Math.toRadians(currentPoint[3]) + (odometry.getAngle() - currentPoint[6]) * Kp_a
     );
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    System.out.println("Finished!!!!!");
+    swerve.setAbsoluteSwerveVelocoties(new Vector(0, 0, Representation.Polar), 0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return this.stopWatch.getDuration() > lastTime;
   }
 }

@@ -48,7 +48,7 @@ public class BasicSwerveOdometry extends SubsystemBase {
   }
 
   public double getAngle() {
-    return this.gyro.getAngle();
+    return -this.gyro.getAngle();
   }
 
   @Override

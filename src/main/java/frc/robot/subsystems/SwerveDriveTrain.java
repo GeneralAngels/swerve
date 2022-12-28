@@ -106,12 +106,15 @@ public class SwerveDriveTrain extends SubsystemBase {
     double xVelocity = (rightFrontVector.getX() + rightRearVector.getX() + leftRearVector.getX() + leftFrontVector.getX()) / 4;
     double yVelocity = (rightFrontVector.getY() + rightRearVector.getY() + leftRearVector.getY() + leftFrontVector.getY()) / 4;
 
-    return new Vector3d(
+    Vector3d vector = new Vector3d(
       xVelocity,
       yVelocity,
       (rightFrontVector.getX() - xVelocity) / -(length / 2),
       Representation.Cartisian
     );
+
+    vector.rotateVector(Math.toRadians(90));
+    return vector;
   }
   
   @Override
