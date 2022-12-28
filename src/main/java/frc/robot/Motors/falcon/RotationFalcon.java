@@ -72,6 +72,29 @@ public class RotationFalcon extends Falcon implements RotationMotorInterface {
     }
 
     public void setAngle(double angle) {
+        this.setPosition(newOptimize(angle));
+    }
+
+    public double oldOptimize(double angle) {
+        double wantedTick = this.anglesToTicks(angle) + tick_0;
+        double curretPosition = this.getPosition();
+
+        double error = wantedTick - curretPosition;
+        double finalTarget;
+
+        if (error > this.anglesToTicks(180)) {
+            finalTarget = wantedTick - this.anglesToTicks(360);
+        }
+        else if (error < this.anglesToTicks(-180)) {
+            finalTarget = wantedTick + this.anglesToTicks(360);
+        }
+        else {
+            finalTarget = wantedTick;
+        }
+        return finalTarget;
+    }
+    
+    public double newOptimize(double angle) {
         double curretPosition = this.getPosition();
         double currentAngle = this.getAngleByFalcon();
         double wantedTick;
@@ -86,7 +109,7 @@ public class RotationFalcon extends Falcon implements RotationMotorInterface {
             wantedTick = curretPosition + anglesToTicks(error2);
         }
                 
-        this.setPosition(wantedTick);
+        return wantedTick;
     }
 
     public void setEncoder() {
