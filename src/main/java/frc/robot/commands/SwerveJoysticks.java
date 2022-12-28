@@ -29,7 +29,7 @@ public class SwerveJoysticks extends CommandBase {
   @Override
   public void execute() {
     Vector locationVector = this.controller.getLocationVector();
-    this.swerve.setAbsoluteSwerveVelocoties(locationVector, this.controller.getOmega());
+    this.swerve.setRelativeSwerveVelocoties(locationVector, this.controller.getOmega());
   }
 
   // Called once the command ends or is interrupted.

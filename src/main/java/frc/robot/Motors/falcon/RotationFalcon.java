@@ -72,7 +72,7 @@ public class RotationFalcon extends Falcon implements RotationMotorInterface {
     }
 
     public void setAngle(double angle) {
-        this.setPosition(newOptimize(angle));
+        this.setPosition(oldOptimize(angle));
     }
 
     public double oldOptimize(double angle) {
