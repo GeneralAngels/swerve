@@ -5,19 +5,15 @@
 package frc.robot;
 
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
-import com.ctre.phoenix.time.StopWatch;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import frc.robot.Autonomous.PathFollower;
 import frc.robot.Autonomous.PathTextParser;
 import frc.robot.SwerveContainer.SwerveContainer;
-import frc.robot.Utils.Vector;
-import frc.robot.Utils.Vector.Representation;
 import frc.robot.commands.LogCommand;
 import frc.robot.commands.SwerveJoysticks;
 import frc.robot.subsystems.BasicSwerveOdometry;
