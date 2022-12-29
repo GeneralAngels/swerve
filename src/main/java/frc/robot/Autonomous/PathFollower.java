@@ -4,6 +4,8 @@
 
 package frc.robot.Autonomous;
 
+import java.util.Currency;
+
 import com.ctre.phoenix.time.StopWatch;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -49,7 +51,12 @@ public class PathFollower extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double[] currentPoint = pathArray[(int) Math.floor(stopWatch.getDuration() / 0.01)];
+    int index = (int) Math.floor(stopWatch.getDuration() / 0.01);
+    if (index > pathArray.length - 1) {
+      index = pathArray.length - 1;
+    }
+    
+    double[] currentPoint = pathArray[index];
     coordinate robotCoordinate = odometry.getRobotCoordinate();
 
     Vector robotVector = new Vector(robotCoordinate.x, robotCoordinate.y, Representation.Cartisian);
@@ -81,7 +88,7 @@ public class PathFollower extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("Finished!!!!!");
+    System.out.println("Finished!!!");
     swerve.setAbsoluteSwerveVelocoties(new Vector(0, 0, Representation.Polar), 0);
   }
 

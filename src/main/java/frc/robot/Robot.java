@@ -81,7 +81,7 @@ public class Robot extends TimedRobot {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     PathTextParser textParser = new PathTextParser(Filesystem.getDeployDirectory().getAbsolutePath() + "/Path.txt");
-    m_autonomousCommand = new PathFollower(textParser.getPathArray(), -0.4, -0.4, this.swerveContainer.swerve, new BasicSwerveOdometry(0, 0, 0, this.swerveContainer.swerve, new WPI_PigeonIMU(30)));
+    m_autonomousCommand = new PathFollower(textParser.getPathArray(), -0.3, -0.4, this.swerveContainer.swerve, new BasicSwerveOdometry(0, 0, 0, this.swerveContainer.swerve, new WPI_PigeonIMU(30)));
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {

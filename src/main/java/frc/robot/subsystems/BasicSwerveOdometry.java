@@ -11,9 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Utils.Vector3d;
 
 public class BasicSwerveOdometry extends SubsystemBase {
-  double x;
-  double y;
-  double angle;
+  coordinate loc;
 
   StopWatch stopWatch = new StopWatch();
   double lastTime = 0;
@@ -24,9 +22,7 @@ public class BasicSwerveOdometry extends SubsystemBase {
   
   /** Creates a new BasicSwerveOdometry. */
   public BasicSwerveOdometry(double x0, double y0, double angle0, SwerveDriveTrain swerve, Gyro gyro) {
-    this.x = x0;
-    this.y = y0;
-    this.angle = angle0;
+    this.loc = new coordinate(x0, y0, angle0);
     
     this.swerve = swerve;
 
@@ -34,9 +30,9 @@ public class BasicSwerveOdometry extends SubsystemBase {
   }
 
   public void update(double time, Vector3d robotVector) {
-    this.x += robotVector.getX() * time;
-    this.y += robotVector.getY() * time;
-    this.angle += robotVector.getOmega() * time;
+    this.loc.x += robotVector.getX() * time;
+    this.loc.y += robotVector.getY() * time;
+    this.loc.angle += robotVector.getOmega() * time;
   }
 
   public void start() {
@@ -44,7 +40,7 @@ public class BasicSwerveOdometry extends SubsystemBase {
   }
 
   public coordinate getRobotCoordinate() {
-    return new coordinate(this.x, this.y, this.angle);
+    return this.loc;
   }
 
   public double getAngle() {

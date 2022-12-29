@@ -24,8 +24,8 @@ public class SwerveDriveTrain extends SubsystemBase {
   double length;
 
   /** Creates a new SwerveDriveTrain. */
-  public SwerveDriveTrain(
-    SwerveModule rightFront, SwerveModule rightRear, SwerveModule leftRear, SwerveModule leftFront,
+  public SwerveDriveTrain(SwerveModule rightFront, SwerveModule rightRear, 
+    SwerveModule leftRear, SwerveModule leftFront,
     WPI_PigeonIMU gyro, 
     double width, double length) {
     
@@ -106,6 +106,8 @@ public class SwerveDriveTrain extends SubsystemBase {
     double xVelocity = (rightFrontVector.getX() + rightRearVector.getX() + leftRearVector.getX() + leftFrontVector.getX()) / 4;
     double yVelocity = (rightFrontVector.getY() + rightRearVector.getY() + leftRearVector.getY() + leftFrontVector.getY()) / 4;
 
+    // TODO: Rotate vector to absolute vector by gyro!.
+    // Meanwhile vector is relative and problematic! can't be used
     Vector3d vector = new Vector3d(
       xVelocity,
       yVelocity,
