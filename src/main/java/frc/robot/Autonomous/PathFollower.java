@@ -35,6 +35,7 @@ public class PathFollower extends CommandBase {
 
     this.swerve = swerve;
     this.Kp = Kp;
+    this.Kp_a = Kp_a;
     this.pathArray = pathArray;
 
     this.odometry = odometry;
@@ -78,10 +79,12 @@ public class PathFollower extends CommandBase {
 
     System.out.println(String.format("x_tag: %f, y_tag: %f", movementVector.getX(), movementVector.getY()));
 
+    double angleCorrection = (currentPoint[6] - odometry.getAngle()) * Kp_a;
+    System.out.println(String.format("angle correction: %f", angleCorrection));
     
     swerve.setAbsoluteSwerveVelocoties(
       new Vector(movementVector.getX(), movementVector.getY(), Representation.Cartisian),     
-      Math.toRadians(currentPoint[3]) + (odometry.getAngle() - currentPoint[6]) * Kp_a
+      Math.toRadians(angleCorrection + currentPoint[3])
     );
   }
 

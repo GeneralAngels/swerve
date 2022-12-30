@@ -97,7 +97,7 @@ public class SwerveDriveTrain extends SubsystemBase {
     );
   }
 
-  public Vector3d getRobotVector() {
+  public Vector3d getRelativeRobotVector() {
     Vector rightFrontVector = rightFront.getVector();
     Vector rightRearVector = rightRear.getVector();
     Vector leftRearVector = leftRear.getVector();
@@ -106,8 +106,7 @@ public class SwerveDriveTrain extends SubsystemBase {
     double xVelocity = (rightFrontVector.getX() + rightRearVector.getX() + leftRearVector.getX() + leftFrontVector.getX()) / 4;
     double yVelocity = (rightFrontVector.getY() + rightRearVector.getY() + leftRearVector.getY() + leftFrontVector.getY()) / 4;
 
-    // TODO: Rotate vector to absolute vector by gyro!.
-    // Meanwhile vector is relative and problematic! can't be used
+    
     Vector3d vector = new Vector3d(
       xVelocity,
       yVelocity,
@@ -118,6 +117,17 @@ public class SwerveDriveTrain extends SubsystemBase {
     vector.rotateVector(Math.toRadians(90));
     return vector;
   }
+
+  public Vector3d getAbsoluteRobotVector() {
+    double radiansRobotGyro = Math.toRadians(this.gyro.getAngle());
+    Vector3d relativeRobotVector = getRelativeRobotVector();
+
+    relativeRobotVector.rotateVector(-radiansRobotGyro);
+    // TODO: Rotate vector to absolute vector by gyro!.
+    // Meanwhile vector is relative and problematic! can't be used
+    return relativeRobotVector;
+  }
+  
   
   @Override
   public void periodic() {

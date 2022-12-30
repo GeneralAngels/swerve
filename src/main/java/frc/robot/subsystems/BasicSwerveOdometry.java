@@ -49,7 +49,7 @@ public class BasicSwerveOdometry extends SubsystemBase {
 
   @Override
   public void periodic() {
-    this.update(stopWatch.getDuration() - lastTime, this.swerve.getRobotVector());
+    this.update(stopWatch.getDuration() - lastTime, this.swerve.getAbsoluteRobotVector());
     lastTime = stopWatch.getDuration();
     // This method will be called once per scheduler run
   }

@@ -6,6 +6,7 @@ package frc.robot.SwerveContainer;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+import com.ctre.phoenix.time.StopWatch;
 
 import frc.robot.Motors.SwerveModule;
 import frc.robot.Motors.falcon.Falcon;
@@ -15,7 +16,7 @@ import frc.robot.subsystems.SwerveDriveTrain;
 /** Add your docs here. */
 public class SwerveContainer {
     // Sensors:
-    WPI_PigeonIMU gyro = new WPI_PigeonIMU(30);
+    public WPI_PigeonIMU gyro = setAndReturnGyro();
     
     // Setting DrivingMotors:
     Falcon drivingRightFront = new Falcon(
@@ -101,4 +102,9 @@ public class SwerveContainer {
         gyro, 
         SwerveConstants.swerveWidth, SwerveConstants.swerveLength
     );
+
+    public WPI_PigeonIMU setAndReturnGyro()  {
+      WPI_PigeonIMU gyro = new WPI_PigeonIMU(30);
+      return gyro;
+    }
 }

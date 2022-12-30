@@ -48,6 +48,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     joysticksCommand.execute();
+    System.out.println(String.format("gyro angle: %f", this.swerveContainer.swerve.gyro.getAngle()));
   }
 
   /**
@@ -81,7 +82,7 @@ public class Robot extends TimedRobot {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     PathTextParser textParser = new PathTextParser(Filesystem.getDeployDirectory().getAbsolutePath() + "/Path.txt");
-    m_autonomousCommand = new PathFollower(textParser.getPathArray(), -0.3, -0.4, this.swerveContainer.swerve, new BasicSwerveOdometry(0, 0, 0, this.swerveContainer.swerve, new WPI_PigeonIMU(30)));
+    m_autonomousCommand = new PathFollower(textParser.getPathArray(), -0.0, 0.7, this.swerveContainer.swerve, new BasicSwerveOdometry(0, 0, 0, this.swerveContainer.swerve, this.swerveContainer.gyro));
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
