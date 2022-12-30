@@ -2,13 +2,15 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.SwerveContainer.SwerveOdometry;
 
 import com.ctre.phoenix.time.StopWatch;
 
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Utils.Vector3d;
+import frc.robot.subsystems.SwerveDriveTrain;
+import frc.robot.subsystems.coordinate;
 
 public class BasicSwerveOdometry extends SubsystemBase {
   coordinate loc;

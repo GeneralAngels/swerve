@@ -6,6 +6,8 @@ package frc.robot;
 
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -14,9 +16,11 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Autonomous.PathFollower;
 import frc.robot.Autonomous.PathTextParser;
 import frc.robot.SwerveContainer.SwerveContainer;
+import frc.robot.SwerveContainer.SwerveOdometry.BasicSwerveOdometry;
+import frc.robot.SwerveContainer.SwerveOdometry.WpilibOdometryWrapper;
 import frc.robot.commands.LogCommand;
 import frc.robot.commands.SwerveJoysticks;
-import frc.robot.subsystems.BasicSwerveOdometry;
+import frc.robot.subsystems.coordinate;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -33,6 +37,8 @@ public class Robot extends TimedRobot {
   PS4Controller controller = new PS4Controller(0);
   Command joysticksCommand = new SwerveJoysticks(controller, swerveContainer.swerve);
 
+  WpilibOdometryWrapper wpilibOdometry = new WpilibOdometryWrapper(swerveContainer.swerve, new Pose2d(0, 0, new Rotation2d()));
+
   LogCommand log = new LogCommand(0, () -> {return 2.2;}, m_robotContainer.outputStream);
 
   /**
@@ -48,7 +54,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     joysticksCommand.execute();
-    System.out.println(String.format("gyro angle: %f", this.swerveContainer.swerve.gyro.getAngle()));
+    coordinate coordinate = this.wpilibOdometry.getRobotCoordinate();
+    System.out.println(String.format("x: %f, y: %f", coordinate.x, coordinate.y));
   }
 
   /**
@@ -82,7 +89,14 @@ public class Robot extends TimedRobot {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     PathTextParser textParser = new PathTextParser(Filesystem.getDeployDirectory().getAbsolutePath() + "/Path.txt");
-    m_autonomousCommand = new PathFollower(textParser.getPathArray(), -0.0, 0.7, this.swerveContainer.swerve, new BasicSwerveOdometry(0, 0, 0, this.swerveContainer.swerve, this.swerveContainer.gyro));
+    // m_autonomousCommand = new PathFollower(textParser.getPathArray(), -0.0, 0.7, this.swerveContainer.swerve, new BasicSwerveOdometry(0, 0, 0, this.swerveContainer.swerve, this.swerveContainer.gyro));
+    m_autonomousCommand = new PathFollower(
+      textParser.getPathArray(), 
+      0.5, 
+      0.7, 
+      this.swerveContainer.swerve, 
+      wpilibOdometry
+    );
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {

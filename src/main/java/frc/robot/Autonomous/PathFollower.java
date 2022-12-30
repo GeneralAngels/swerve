@@ -4,14 +4,12 @@
 
 package frc.robot.Autonomous;
 
-import java.util.Currency;
-
 import com.ctre.phoenix.time.StopWatch;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.SwerveContainer.SwerveOdometry.WpilibOdometryWrapper;
 import frc.robot.Utils.Vector;
 import frc.robot.Utils.Vector.Representation;
-import frc.robot.subsystems.BasicSwerveOdometry;
 import frc.robot.subsystems.SwerveDriveTrain;
 import frc.robot.subsystems.coordinate;
 
@@ -26,10 +24,10 @@ public class PathFollower extends CommandBase {
   StopWatch stopWatch = new StopWatch();
   double lastTime;
 
-  BasicSwerveOdometry odometry;
+  WpilibOdometryWrapper odometry;
   
   /** Creates a new PathFollower. */
-  public PathFollower(double[][] pathArray, double Kp, double Kp_a, SwerveDriveTrain swerve, BasicSwerveOdometry odometry) {
+  public PathFollower(double[][] pathArray, double Kp, double Kp_a, SwerveDriveTrain swerve, WpilibOdometryWrapper odometry) {
     addRequirements(swerve);
     // Use addRequirements() here to declare subsystem dependencies.
 
@@ -65,21 +63,23 @@ public class PathFollower extends CommandBase {
     // [t, x_tag, y_tag, omega, x, y, angle]
     // [0,   1,    ,2,    ,3   ,4, 5,   6]
 
-    System.out.println(String.format("wanted x: %f, wanted y: %f, wanted angle: %f", currentPoint[4], currentPoint[5], currentPoint[6]));
-    System.out.println(String.format("x: %f, y: %f, angle: %f", robotVector.getX(), robotVector.getY(), odometry.getAngle()));
+    System.out.println(String.format("wanted x: %f, wanted y: %f, wanted angle: %f, wx': %f, wy': %f", currentPoint[4], currentPoint[5], currentPoint[6], currentPoint[1], currentPoint[2]));
+    System.out.println(String.format("x: %f, y: %f, angle: %f", robotVector.getX(), robotVector.getY(), robotCoordinate.angle));
 
     Vector movementVector = new Vector(
       currentPoint[1] + (currentPoint[4] - robotVector.getX()) * Kp,
-      currentPoint[2] + (currentPoint[5] - robotVector.getY()) * Kp,
+      currentPoint[2] + (currentPoint[5] - robotVector.getY()) * -Kp,
       Representation.Cartisian
     );
+
+    System.out.println(String.format("x_tag: %f, y_tag: %f", movementVector.getX(), movementVector.getY()));
+
 
     
     movementVector.rotateVector(Math.toRadians(90));
 
-    System.out.println(String.format("x_tag: %f, y_tag: %f", movementVector.getX(), movementVector.getY()));
 
-    double angleCorrection = (currentPoint[6] - odometry.getAngle()) * Kp_a;
+    double angleCorrection = (currentPoint[6] - robotCoordinate.angle) * Kp_a;
     System.out.println(String.format("angle correction: %f", angleCorrection));
     
     swerve.setAbsoluteSwerveVelocoties(

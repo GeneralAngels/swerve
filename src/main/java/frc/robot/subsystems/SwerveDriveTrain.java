@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Motors.SwerveModule;
 import frc.robot.Utils.Vector3d;
@@ -128,6 +130,21 @@ public class SwerveDriveTrain extends SubsystemBase {
     return relativeRobotVector;
   }
   
+  public SwerveModuleState getRightFrontModuleState() {
+    return new SwerveModuleState(this.rightFront.getVelocity(), Rotation2d.fromDegrees(this.rightFront.getAngle()));
+  }
+
+  public SwerveModuleState getRightRearModuleState() {
+    return new SwerveModuleState(this.rightRear.getVelocity(), Rotation2d.fromDegrees(this.rightRear.getAngle()));
+  }
+  
+  public SwerveModuleState getLeftFrontModuleState() {
+    return new SwerveModuleState(this.leftFront.getVelocity(), Rotation2d.fromDegrees(this.leftFront.getAngle()));
+  }
+
+  public SwerveModuleState getLeftRearModuleState() {
+    return new SwerveModuleState(this.leftRear.getVelocity(), Rotation2d.fromDegrees(this.leftRear.getAngle()));
+  }
   
   @Override
   public void periodic() {
