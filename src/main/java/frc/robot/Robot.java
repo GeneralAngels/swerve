@@ -54,8 +54,11 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     joysticksCommand.execute();
-    coordinate coordinate = this.wpilibOdometry.getRobotCoordinate();
-    System.out.println(String.format("x: %f, y: %f", coordinate.x, coordinate.y));
+    // coordinate coordinate = this.wpilibOdometry.getRobotCoordinate();
+    // System.out.println(String.format("x: %f, y: %f", coordinate.x, coordinate.y));
+
+    double angle = this.swerveContainer.gyro.getAngle();
+    System.out.println(String.format("gyro angle: %f", angle));
   }
 
   /**
