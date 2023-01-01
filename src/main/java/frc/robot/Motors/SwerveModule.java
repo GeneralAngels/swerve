@@ -32,19 +32,41 @@ public class SwerveModule {
     public void setAngle(double angle){
         rotationMotor.setAngle(angle);
     }
+    
+    private static double placeInAppropriate0To360Scope(double scopeReference, double newAngle) {
+        double lowerBound;
+        double upperBound;
+        double lowerOffset = scopeReference % 360;
+        if (lowerOffset >= 0) {
+            lowerBound = scopeReference - lowerOffset;
+            upperBound = scopeReference + (360 - lowerOffset);
+        } else {
+            upperBound = scopeReference - lowerOffset;
+            lowerBound = scopeReference - (360 + lowerOffset);
+        }
+        while (newAngle < lowerBound) {
+            newAngle += 360;
+        }
+        while (newAngle > upperBound) {
+            newAngle -= 360;
+        }
+        if (newAngle - scopeReference > 180) {
+            newAngle -= 360;
+        } else if (newAngle - scopeReference < -180) {
+            newAngle += 360;
+        }
+        return newAngle;
+    }
 
-    public double optimizeAngle(double angle) {
-        double currentAngle = this.getAngle();
-        System.out.println(String.format("curent angle: %f, angle: %f, lower bound: %f, upper bound: %f", currentAngle, angle, angle - 90, angle + 90));
-        if (currentAngle > angle - 90 && currentAngle < angle + 90) {
-            direction = 1;
-            return angle;
-        }
-        else {
-            direction = -1;
-            rotationMotor.changeFlipped();
-            return angle + 180;
-        }
+    public static double[] optimize(double desiredAngle, double desiredVelocity, double currentAngle) {
+        double targetAngle = placeInAppropriate0To360Scope(currentAngle, desiredAngle);
+        double targetSpeed = desiredVelocity;
+        double delta = targetAngle - currentAngle;
+        if (Math.abs(delta) > 90){
+            targetSpeed = -targetSpeed;
+            targetAngle = delta > 90 ? (targetAngle -= 180) : (targetAngle += 180);
+        }        
+        return new double[] {targetAngle, targetSpeed};
     }
 
     public void setVelocity(double metersPerSecond){
@@ -57,8 +79,10 @@ public class SwerveModule {
     }
 
     public void setVector(Vector vector){
-        this.setVelocity(vector.getMagnitude());
-        this.setAngle(vector.getAngle());
+        double[] optimizedStates = optimize(vector.getAngle(), vector.getMagnitude(), getAngle());
+        
+        this.setVelocity(optimizedStates[1]);
+        this.setAngle(optimizedStates[0]);
     }
 
     public Vector getVector() {

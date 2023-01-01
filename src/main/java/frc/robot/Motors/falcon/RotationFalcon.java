@@ -124,7 +124,7 @@ public class RotationFalcon extends Falcon implements RotationMotorInterface {
     }
     
     public double ticksToAngle(double ticks){
-        return ((ticks / 2048) * 360 / drivingToDrivenGearRatio) % 360;
+        return ((ticks / 2048) * 360 / drivingToDrivenGearRatio);
     }
 
     public double getAngleByCanCoder(){
@@ -133,12 +133,7 @@ public class RotationFalcon extends Falcon implements RotationMotorInterface {
     }
 
     public double getAngleByFalcon() {
-        if (isFlipeed) {
-            return -(360 - ticksToAngle(this._talon.getSelectedSensorPosition(0) - tick_0));
-        }
-        else {
-            return ticksToAngle(this._talon.getSelectedSensorPosition(0) - tick_0);
-        }
+        return ticksToAngle(this._talon.getSelectedSensorPosition() - tick_0);
     }
     
     @Override

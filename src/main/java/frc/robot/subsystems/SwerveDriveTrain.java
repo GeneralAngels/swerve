@@ -54,7 +54,6 @@ public class SwerveDriveTrain extends SubsystemBase {
       Representation.Cartisian
     );
 
-
     // System.out.println(String.format("rightFront vector: angle = %f, velocity = %f", vector.getAngle(), vector.getMagnitude()));
     this.rightFront.setVector(rightFrontVector);
 
