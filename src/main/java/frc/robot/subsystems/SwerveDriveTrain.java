@@ -7,9 +7,12 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Motors.SwerveModule;
+import frc.robot.SwerveContainer.SwerveConstants;
 import frc.robot.Utils.Vector3d;
 import frc.robot.Utils.Vector;
 import frc.robot.Utils.Vector.Representation;
@@ -44,6 +47,37 @@ public class SwerveDriveTrain extends SubsystemBase {
 
     this.width = width;
     this.length = length;
+  }
+
+  public void setWpiRelativeSwerveVelocoties(ChassisSpeeds speeds) {
+    SwerveModuleState[] swerveModuleStates = 
+      SwerveConstants.kinematics.toSwerveModuleStates(
+        new ChassisSpeeds(
+          speeds.vxMetersPerSecond, 
+          speeds.vyMetersPerSecond, 
+          speeds.omegaRadiansPerSecond
+        )
+    );
+
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.maxSpeed);
+
+    this.rightFront.setState(swerveModuleStates[0]);
+    this.rightRear.setState(swerveModuleStates[1]);
+    this.leftRear.setState(swerveModuleStates[2]);
+    this.leftFront.setState(swerveModuleStates[3]);
+  }
+
+  public ChassisSpeeds fromFieldRelativeVelocoties(Vector vector, double omega) {
+    return ChassisSpeeds.fromFieldRelativeSpeeds(
+      vector.getX(), 
+      vector.getY(), 
+      omega, 
+      Rotation2d.fromDegrees(this.gyro.getAngle())
+    );
+  }
+
+  public void setWpiAbsoluteVelocoties(Vector vector, double omega) {
+    this.setWpiRelativeSwerveVelocoties(new ChassisSpeeds(vector.getX(), vector.getY(), omega));
   }
 
   public void setRelativeSwerveVelocoties(Vector vector, double omega) {    

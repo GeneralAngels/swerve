@@ -4,8 +4,13 @@
 
 package frc.robot.SwerveContainer;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+
 /** Add your docs here. */
 public class SwerveConstants {
+    public static final double maxSpeed = 5;
+    
     // Swerve gears and wheels: 
     public static final double wheelRadius = 0.0508;
     public static final double Driving_MotorToDrivenRatio = 8.14 / 1;
@@ -27,6 +32,18 @@ public class SwerveConstants {
     public static final double Rotation_Kd = 0.0;
 
 
+    // Kinematics:
+    // mod0: front right
+    // mod1: right rear
+    // mod2: left rear
+    // mod3: left front
+    public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
+      new Translation2d(SwerveConstants.swerveWidth / 2, SwerveConstants.swerveLength / 2),
+      new Translation2d(SwerveConstants.swerveWidth / 2, -SwerveConstants.swerveLength / 2),
+      new Translation2d(-SwerveConstants.swerveWidth / 2, -SwerveConstants.swerveLength / 2),
+      new Translation2d(-SwerveConstants.swerveWidth / 2, SwerveConstants.swerveLength / 2)
+    );
+    
     // CanCoder home angles:
     public static double homeFrontRightAngle = 37.001;
     public static double homeRearRightAngle = 224.38;

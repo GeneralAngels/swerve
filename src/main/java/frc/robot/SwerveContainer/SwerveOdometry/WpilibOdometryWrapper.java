@@ -6,7 +6,6 @@ package frc.robot.SwerveContainer.SwerveOdometry;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,12 +26,7 @@ public class WpilibOdometryWrapper extends SubsystemBase {
     this.swerve = swerve;
     
     // Setting structure of swerve:
-    SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-      new Translation2d(SwerveConstants.swerveWidth / 2, SwerveConstants.swerveLength / 2),
-      new Translation2d(SwerveConstants.swerveWidth / 2, -SwerveConstants.swerveLength / 2),
-      new Translation2d(-SwerveConstants.swerveWidth / 2, -SwerveConstants.swerveLength / 2),
-      new Translation2d(-SwerveConstants.swerveWidth / 2, SwerveConstants.swerveLength / 2)
-    );
+    SwerveDriveKinematics kinematics = SwerveConstants.kinematics;
 
     // Setting odometry:
     this.wpilibOdometry = new SwerveDriveOdometry(

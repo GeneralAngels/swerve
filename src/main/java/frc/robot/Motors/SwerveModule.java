@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.Motors;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Motors.abstractMotors.MotorInterface;
 import frc.robot.Motors.abstractMotors.RotationMotorInterface;
 import frc.robot.Utils.Vector;
@@ -81,6 +82,13 @@ public class SwerveModule {
     public void setVector(Vector vector){
         double[] optimizedStates = optimize(vector.getAngle(), vector.getMagnitude(), getAngle());
         
+        this.setVelocity(optimizedStates[1]);
+        this.setAngle(optimizedStates[0]);
+    }
+
+    public void setState(SwerveModuleState desiredState) {
+        double[] optimizedStates = optimize(desiredState.angle.getDegrees(), desiredState.speedMetersPerSecond, getAngle());
+
         this.setVelocity(optimizedStates[1]);
         this.setAngle(optimizedStates[0]);
     }
