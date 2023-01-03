@@ -38,15 +38,15 @@ public class SwerveConstants {
     // mod2: left rear
     // mod3: left front
     public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-      new Translation2d(SwerveConstants.swerveWidth / 2, SwerveConstants.swerveLength / 2),
-      new Translation2d(SwerveConstants.swerveWidth / 2, -SwerveConstants.swerveLength / 2),
       new Translation2d(-SwerveConstants.swerveWidth / 2, -SwerveConstants.swerveLength / 2),
+      new Translation2d(SwerveConstants.swerveWidth / 2, -SwerveConstants.swerveLength / 2),
+      new Translation2d(SwerveConstants.swerveWidth / 2, SwerveConstants.swerveLength / 2),
       new Translation2d(-SwerveConstants.swerveWidth / 2, SwerveConstants.swerveLength / 2)
     );
     
     // CanCoder home angles:
-    public static double homeFrontRightAngle = 37.001;
-    public static double homeRearRightAngle = 224.38;
-    public static double homeRearLeftAngle = 353.93;
-    public static double homeFrontLeftAngle = 289.24;
+    public static double homeFrontRightAngle = (37.001 + 180) % 360;
+    public static double homeRearRightAngle = (224.38 + 180) % 360;
+    public static double homeRearLeftAngle = (353.93 + 180) % 360;
+    public static double homeFrontLeftAngle = (289.24 + 180) % 360;
 }

@@ -54,7 +54,7 @@ public class SwerveDriveTrain extends SubsystemBase {
       SwerveConstants.kinematics.toSwerveModuleStates(
         new ChassisSpeeds(
           speeds.vxMetersPerSecond, 
-          speeds.vyMetersPerSecond, 
+          -speeds.vyMetersPerSecond, 
           speeds.omegaRadiansPerSecond
         )
     );
@@ -76,8 +76,8 @@ public class SwerveDriveTrain extends SubsystemBase {
     );
   }
 
-  public void setWpiAbsoluteVelocoties(Vector vector, double omega) {
-    this.setWpiRelativeSwerveVelocoties(new ChassisSpeeds(vector.getX(), vector.getY(), omega));
+  public void setWpiAbsoluteVelocoties(ChassisSpeeds speeds) {
+    this.setWpiRelativeSwerveVelocoties(ChassisSpeeds.fromFieldRelativeSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, Rotation2d.fromDegrees(-this.gyro.getAngle())));
   }
 
   public void setRelativeSwerveVelocoties(Vector vector, double omega) {    

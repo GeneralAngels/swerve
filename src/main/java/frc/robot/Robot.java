@@ -8,6 +8,7 @@ import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -57,6 +58,16 @@ public class Robot extends TimedRobot {
     // coordinate coordinate = this.wpilibOdometry.getRobotCoordinate();
     // System.out.println(String.format("x: %f, y: %f", coordinate.x, coordinate.y));
 
+    /*
+    swerveContainer.swerve.setWpiRelativeSwerveVelocoties(
+      new ChassisSpeeds(
+        0.0,
+        0.2,
+        0.0
+      )
+    );
+    */
+    
     double angle = this.swerveContainer.gyro.getAngle();
     System.out.println(String.format("gyro angle: %f", angle));
   }
@@ -118,7 +129,6 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    
   }
 
   /** This function is called periodically during operator control. */

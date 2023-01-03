@@ -21,8 +21,8 @@ public class ControllerCalculator {
 
     public Vector getLocationVector() {
         Vector vector = new Vector(
-            this.getY(),
-            -this.getX(),
+            this.getX(),
+            -this.getY(),
             Representation.Cartisian
         );
         vector.changeMagnitude(this.getGas() * maxSpeed);
