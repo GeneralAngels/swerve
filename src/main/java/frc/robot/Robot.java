@@ -4,24 +4,24 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.sensors.WPI_PigeonIMU;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Autonomous.PathFollower; 
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Autonomous.PathFollower;
 import frc.robot.Autonomous.PathTextParser;
 import frc.robot.SwerveContainer.SwerveContainer;
-import frc.robot.SwerveContainer.SwerveOdometry.BasicSwerveOdometry;
 import frc.robot.SwerveContainer.SwerveOdometry.WpilibOdometryWrapper;
 import frc.robot.commands.LogCommand;
 import frc.robot.commands.SwerveJoysticks;
-import frc.robot.subsystems.coordinate;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -54,7 +54,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    joysticksCommand.execute();
+    // joysticksCommand.execute();
     // coordinate coordinate = this.wpilibOdometry.getRobotCoordinate();
     // System.out.println(String.format("x: %f, y: %f", coordinate.x, coordinate.y));
 
@@ -69,7 +69,7 @@ public class Robot extends TimedRobot {
     */
     
     double angle = this.swerveContainer.gyro.getAngle();
-    System.out.println(String.format("gyro angle: %f", angle));
+    System.out.println(String.format("gyro angle: %f", Math.abs(angle) % 360 * -Math.signum(angle)));
   }
 
   /**
@@ -129,6 +129,25 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+
+    swerveContainer.swerve.setDefaultCommand(joysticksCommand);
+    new JoystickButton(controller, Button.kTriangle.value).whenActive(
+      new StartEndCommand(
+        () -> {this.swerveContainer.swerve.setWpiAbsoluteVelocoties(new ChassisSpeeds(0, 1, 0));}, 
+        () -> {this.swerveContainer.swerve.setWpiAbsoluteVelocoties(new ChassisSpeeds(0, 0, 0));}, 
+        swerveContainer.swerve)).whenInactive(new StartEndCommand(
+          () -> {this.swerveContainer.swerve.setWpiAbsoluteVelocoties(new ChassisSpeeds(0, 0, 0));},
+          () -> {}, 
+          swerveContainer.swerve));
+
+    new JoystickButton(controller, Button.kTouchpad.value).whenPressed(
+      new FunctionalCommand(
+        () -> {this.swerveContainer.swerve.resetAllEncoderToAbsolute();}, 
+        () -> {}, 
+        (Boolean isFinished) -> {}, 
+        () -> {return true;}
+        )
+    );
   }
 
   /** This function is called periodically during operator control. */

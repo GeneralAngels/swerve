@@ -61,10 +61,21 @@ public class SwerveDriveTrain extends SubsystemBase {
 
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.maxSpeed);
 
+    for (SwerveModuleState swerveModuleState : swerveModuleStates) {
+      System.out.println(String.format("desired angle: %f, desired velocity: %f", swerveModuleState.angle.getDegrees(), swerveModuleState.speedMetersPerSecond));
+    }
+    
     this.rightFront.setState(swerveModuleStates[0]);
     this.rightRear.setState(swerveModuleStates[1]);
     this.leftRear.setState(swerveModuleStates[2]);
     this.leftFront.setState(swerveModuleStates[3]);
+  }
+
+  public void resetAllEncoderToAbsolute() {
+    this.rightFront.setEncoder();
+    this.rightRear.setEncoder();
+    this.leftRear.setEncoder();
+    this.leftFront.setEncoder();
   }
 
   public ChassisSpeeds fromFieldRelativeVelocoties(Vector vector, double omega) {
@@ -77,7 +88,8 @@ public class SwerveDriveTrain extends SubsystemBase {
   }
 
   public void setWpiAbsoluteVelocoties(ChassisSpeeds speeds) {
-    this.setWpiRelativeSwerveVelocoties(ChassisSpeeds.fromFieldRelativeSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, Rotation2d.fromDegrees(-this.gyro.getAngle())));
+    double angle = this.gyro.getAngle();
+    this.setWpiRelativeSwerveVelocoties(ChassisSpeeds.fromFieldRelativeSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, Rotation2d.fromDegrees(Math.abs(angle) % 360 * -Math.signum(angle)) ));
   }
 
   public void setRelativeSwerveVelocoties(Vector vector, double omega) {    

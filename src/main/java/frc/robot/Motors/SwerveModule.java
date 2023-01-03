@@ -25,6 +25,10 @@ public class SwerveModule {
         
         this.RotationToMetersRatio = 1 / (2 * Math.PI * wheelRadius) * 60;
     }
+
+    public void setEncoder() {
+        rotationMotor.setEncoder();
+    }
     
     public double getAngle(){
         return rotationMotor.getAngleByFalcon();
