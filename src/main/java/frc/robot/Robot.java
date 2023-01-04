@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.sensors.Pigeon2;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -42,6 +44,8 @@ public class Robot extends TimedRobot {
 
   LogCommand log = new LogCommand(0, () -> {return 2.2;}, m_robotContainer.outputStream);
 
+  Pigeon2 pigeon2 = new Pigeon2(30);
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -50,6 +54,9 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put ourP
     // autonomous chooser on the dashboard
+    pigeon2.configFactoryDefault();
+    pigeon2.zeroGyroBiasNow();
+    pigeon2.setYaw(0);
   }
 
   @Override
@@ -69,7 +76,8 @@ public class Robot extends TimedRobot {
     */
     
     double angle = this.swerveContainer.gyro.getAngle();
-    System.out.println(String.format("gyro angle: %f", Math.abs(angle) % 360 * -Math.signum(angle)));
+    System.out.println(String.format("pigeon1 angle: %f, pigeon2: %f", Math.abs(angle) % 360 * -Math.signum(angle), pigeon2.getYaw()));
+    this.wpilibOdometry.getRobotCoordinate();
   }
 
   /**
