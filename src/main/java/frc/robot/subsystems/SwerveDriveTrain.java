@@ -29,6 +29,11 @@ public class SwerveDriveTrain extends SubsystemBase {
   double length;
 
   /** Creates a new SwerveDriveTrain. */
+  /*
+   * When reseting the absolute encoders, the yellow part of the robot needs to point the positive x direction.
+   * Positive x' towoards the yellow part of the swerve.
+   * Reseting the home angle encoders need to according to this logic.
+   */
   public SwerveDriveTrain(SwerveModule rightFront, SwerveModule rightRear, 
     SwerveModule leftRear, SwerveModule leftFront,
     WPI_PigeonIMU gyro, 
