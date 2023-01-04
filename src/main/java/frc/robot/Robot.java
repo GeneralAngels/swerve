@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -11,8 +12,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PS4Controller;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
@@ -20,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Autonomous.PathFollower;
 import frc.robot.Autonomous.PathTextParser;
+import frc.robot.Motors.falcon.RotationCancoderFalcon;
+import frc.robot.SwerveContainer.SwerveConstants;
 import frc.robot.SwerveContainer.SwerveContainer;
 import frc.robot.SwerveContainer.SwerveOdometry.WpilibOdometryWrapper;
 import frc.robot.commands.LogCommand;
@@ -46,6 +49,8 @@ public class Robot extends TimedRobot {
 
   Pigeon2 pigeon2 = new Pigeon2(30);
 
+  RotationCancoderFalcon cancoderFalcon = new RotationCancoderFalcon(1, new TalonFX(21), SwerveConstants.homeFrontRightAngle);
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -57,6 +62,7 @@ public class Robot extends TimedRobot {
     pigeon2.configFactoryDefault();
     pigeon2.zeroGyroBiasNow();
     pigeon2.setYaw(0);
+    cancoderFalcon.setEncoder();
   }
 
   @Override
@@ -74,9 +80,11 @@ public class Robot extends TimedRobot {
       )
     );
     */
+
+    System.out.println("canCoderFalcon: " + cancoderFalcon.getAngle());
     
     double angle = this.swerveContainer.gyro.getAngle();
-    System.out.println(String.format("pigeon1 angle: %f, pigeon2: %f", Math.abs(angle) % 360 * -Math.signum(angle), pigeon2.getYaw()));
+    // System.out.println(String.format("pigeon1 angle: %f, pigeon2: %f", Math.abs(angle) % 360 * -Math.signum(angle), pigeon2.getYaw()));
     this.wpilibOdometry.getRobotCoordinate();
   }
 
