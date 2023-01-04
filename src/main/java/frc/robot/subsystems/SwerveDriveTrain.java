@@ -60,10 +60,6 @@ public class SwerveDriveTrain extends SubsystemBase {
     );
 
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.maxSpeed);
-
-    for (SwerveModuleState swerveModuleState : swerveModuleStates) {
-      System.out.println(String.format("desired angle: %f, desired velocity: %f", swerveModuleState.angle.getDegrees(), swerveModuleState.speedMetersPerSecond));
-    }
     
     this.rightFront.setState(swerveModuleStates[0]);
     this.rightRear.setState(swerveModuleStates[1]);
